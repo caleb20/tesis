@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.ResponseDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.entity.UsuarioEntity;
@@ -37,6 +38,12 @@ public class TesisController {
 		List<UsuarioEntity> usuarios = usuarioService.listUsuarios();
 		return usuarios;
 
+	}
+
+	@PostMapping("/apoderado")
+	public MessageDTO addApoderado(@RequestBody ApoderadoEntity apoderado) {
+
+		return apoderadoService.addApoderado(apoderado);
 	}
 
 	@GetMapping("/apoderados")

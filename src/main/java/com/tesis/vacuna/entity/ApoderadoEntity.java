@@ -22,6 +22,9 @@ public class ApoderadoEntity {
 	@Column(name = "celular")
 	private String celular;
 
+	@Column(name = "correo")
+	private String correo;
+
 	@Column(name = "edad")
 	private Integer edad;
 
@@ -73,6 +76,14 @@ public class ApoderadoEntity {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
 	public Integer getEdad() {
