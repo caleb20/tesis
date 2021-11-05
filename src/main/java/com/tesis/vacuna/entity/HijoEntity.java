@@ -21,13 +21,13 @@ public class HijoEntity {
 	@Column(name = "apellidos")
 	private String apellidos;
 
-	@Column(name = "fechaNacimiento")
+	@Column(name = "fechanacimiento")
 	private Date fechaNacimiento;
 
 	@Column(name = "edad")
 	private Integer edad;
 
-	@Column(name = "dniPadre")
+	@Column(name = "dnipadre")
 	private String dniPadre;
 
 	public String getDni() {

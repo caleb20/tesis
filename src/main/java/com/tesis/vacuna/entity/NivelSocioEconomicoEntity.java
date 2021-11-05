@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "nivelSocioEconomico")
+@Table(name = "nivelsocioeconomico")
 public class NivelSocioEconomicoEntity {
 
 	@Column(name = "valor")
@@ -16,10 +16,10 @@ public class NivelSocioEconomicoEntity {
 	@Column(name = "descripcion")
 	private String descripcion;
 	
-	@Column(name = "ingresoPromedio")
+	@Column(name = "ingresopromedio")
 	private Integer ingresoPromedio;
 	
-	@Column(name = "tipoVivienda")
+	@Column(name = "tipovivienda")
 	private String tipoVivienda;
 
 	public String getValor() {
