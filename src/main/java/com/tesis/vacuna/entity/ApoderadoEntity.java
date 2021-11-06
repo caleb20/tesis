@@ -1,5 +1,7 @@
 package com.tesis.vacuna.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,6 +20,9 @@ public class ApoderadoEntity {
 
 	@Column(name = "apellidos")
 	private String apellidos;
+
+	@Column(name = "fechanacimiento")
+	private Date fechaNacimiento;
 
 	@Column(name = "celular")
 	private String celular;
@@ -64,6 +69,14 @@ public class ApoderadoEntity {
 
 	public String getApellidos() {
 		return apellidos;
+	}
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public void setApellidos(String apellidos) {

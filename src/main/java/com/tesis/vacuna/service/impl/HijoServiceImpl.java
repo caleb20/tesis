@@ -34,4 +34,16 @@ public class HijoServiceImpl implements HijoService {
 		return messageDTO;
 	}
 
+	@Override
+	public List<HijoEntity> findByDniPadre(String dniPadre) {
+
+		return hijoRepository.findByDniPadre(dniPadre);
+	}
+
+	@Override
+	public HijoEntity findById(String dniHijo) {
+
+		return hijoRepository.findById(dniHijo).get();
+	}
+
 }
