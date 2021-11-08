@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tesis.vacuna.dto.ApoderadoDTO;
+import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
@@ -26,6 +27,7 @@ import com.tesis.vacuna.entity.TipoPoblacionEntity;
 import com.tesis.vacuna.entity.TipoTrabajoEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
+import com.tesis.vacuna.service.ApoderadoHijoService;
 import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.service.EstadoCivilService;
 import com.tesis.vacuna.service.HijoService;
@@ -69,6 +71,9 @@ public class TesisController {
 	@Autowired
 	VacunaService vacunaService;
 
+	@Autowired
+	ApoderadoHijoService apoderadoHijoService;
+
 	// APODERADO
 
 	@GetMapping("/apoderados")
@@ -91,8 +96,8 @@ public class TesisController {
 	}
 
 	@GetMapping("/hijo/{dniApoderado}")
-	public List<HijoEntity> getHijosPorApoderado(@PathVariable String dniApoderado) {
-		List<HijoEntity> hijos = hijoService.findByDniPadre(dniApoderado);
+	public List<HijoDTO> getHijosPorApoderado(@PathVariable String dniApoderado) {
+		List<HijoDTO> hijos = apoderadoHijoService.findByDniApoderado(dniApoderado);
 		return hijos;
 	}
 

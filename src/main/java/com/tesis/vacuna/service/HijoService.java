@@ -11,7 +11,7 @@ public interface HijoService {
 
 	MessageDTO addHijo(HijoEntity hijoEntity);
 
-	List<HijoEntity> findByDniPadre(String dniPadre);
+//	List<HijoEntity> findByDniPadre(String dniPadre);
 
 	HijoEntity findById(String dniHijo);
 }
