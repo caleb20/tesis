@@ -1,20 +1,11 @@
-package com.tesis.vacuna.entity;
+package com.tesis.vacuna.dto;
 
-import java.util.Date;
+public class ApoderadoDTO {
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "apoderado")
-public class ApoderadoEntity {
-
-	@Id
 	private String dni;
 	private String nombres;
 	private String apellidos;
-	private Date fechaNacimiento;
+	private String fechaNacimiento;
 	private String celular;
 	private String correo;
 	private String sexo;
@@ -23,6 +14,7 @@ public class ApoderadoEntity {
 	private String tipoTrabajo;
 	private String nivelSocioeconomico;
 	private String tipoPoblacion;
+	private Integer numeroHijos;
 
 	public String getDni() {
 		return dni;
@@ -48,11 +40,11 @@ public class ApoderadoEntity {
 		this.apellidos = apellidos;
 	}
 
-	public Date getFechaNacimiento() {
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
@@ -118,6 +110,14 @@ public class ApoderadoEntity {
 
 	public void setTipoPoblacion(String tipoPoblacion) {
 		this.tipoPoblacion = tipoPoblacion;
+	}
+
+	public Integer getNumeroHijos() {
+		return numeroHijos;
+	}
+
+	public void setNumeroHijos(Integer numeroHijos) {
+		this.numeroHijos = numeroHijos;
 	}
 
 }

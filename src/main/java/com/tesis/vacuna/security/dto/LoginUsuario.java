@@ -3,19 +3,19 @@ package com.tesis.vacuna.security.dto;
 import javax.validation.constraints.NotBlank;
 
 public class LoginUsuario {
-	
+
 	@NotBlank
-	private String nombreUsuario;
-	
+	private String dni;
+
 	@NotBlank
 	private String password;
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getPassword() {

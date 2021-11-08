@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class GrupoVacunaDTO {
 
 	@JsonIgnore
-	private Integer idEdadAplica;
+	private Integer id;
 	private String edadAplica;
 	private List<VacunaDTO> vacunaDTO;
 
 	public Integer getIdEdadAplica() {
-		return idEdadAplica;
+		return id;
 	}
 
-	public void setIdEdadAplica(Integer idEdadAplica) {
-		this.idEdadAplica = idEdadAplica;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getEdadAplica() {

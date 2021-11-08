@@ -1,19 +1,16 @@
 package com.tesis.vacuna.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "niveleducacion")
+@Table(name = "nivelEducacion")
 public class NivelEducacionEntity {
 
-	@Column(name = "valor")
 	@Id
 	private String valor;
 
-	@Column(name = "descripcion")
 	private String descripcion;
 
 	public String getValor() {

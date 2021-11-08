@@ -6,30 +6,45 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class NuevoUsuario {
+
 	@NotBlank
-	private String nombre;
+	private String nombresApellidos;
+
 	@NotBlank
-	private String nombreUsuario;
+	private String fechaNacimiento;
+
+	@NotBlank
+	private String dni;
+
 	@Email
 	private String email;
-	@NotBlank
+
 	private String password;
+
 	private Set<String> roles = new HashSet<>();
 
-	public String getNombre() {
-		return nombre;
+	public String getNombresApellidos() {
+		return nombresApellidos;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombresApellidos(String nombresApellidos) {
+		this.nombresApellidos = nombresApellidos;
 	}
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getEmail() {

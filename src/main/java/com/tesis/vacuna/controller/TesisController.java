@@ -2,7 +2,10 @@ package com.tesis.vacuna.controller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tesis.vacuna.dto.ApoderadoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
-import com.tesis.vacuna.dto.ResponseDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.entity.EstadoCivilEntity;
@@ -21,7 +24,6 @@ import com.tesis.vacuna.entity.NivelEducacionEntity;
 import com.tesis.vacuna.entity.NivelSocioEconomicoEntity;
 import com.tesis.vacuna.entity.TipoPoblacionEntity;
 import com.tesis.vacuna.entity.TipoTrabajoEntity;
-import com.tesis.vacuna.entity.UsuarioEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
 import com.tesis.vacuna.service.ApoderadoService;
@@ -31,17 +33,14 @@ import com.tesis.vacuna.service.NivelEducacionService;
 import com.tesis.vacuna.service.NivelSocioEconomicoService;
 import com.tesis.vacuna.service.TipoPoblacionService;
 import com.tesis.vacuna.service.TipoTrabajoService;
-import com.tesis.vacuna.service.UsuarioService;
 import com.tesis.vacuna.service.VacunaService;
 import com.tesis.vacuna.service.VacunacionService;
 
 @RestController
 @RequestMapping("/vacunas")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO')")
 public class TesisController {
-
-	@Autowired
-	UsuarioService usuarioService;
 
 	@Autowired
 	ApoderadoService apoderadoService;
@@ -70,28 +69,16 @@ public class TesisController {
 	@Autowired
 	VacunaService vacunaService;
 
-	@PostMapping("/login")
-	public ResponseDTO login(@RequestBody UsuarioEntity usuario) {
-
-		return usuarioService.login(usuario);
-	}
-
-	@GetMapping("/usuarios")
-	public List<UsuarioEntity> getUsuarios() {
-		List<UsuarioEntity> usuarios = usuarioService.listUsuarios();
-		return usuarios;
-	}
-
 	// APODERADO
 
 	@GetMapping("/apoderados")
-	public List<ApoderadoEntity> getApoderados() {
-		List<ApoderadoEntity> apoderados = apoderadoService.listApoderados();
+	public List<ApoderadoDTO> getApoderados() {
+		List<ApoderadoDTO> apoderados = apoderadoService.listApoderados();
 		return apoderados;
 	}
 
 	@PostMapping("/apoderado")
-	public MessageDTO addApoderado(@RequestBody ApoderadoEntity apoderado) {
+	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) {
 		return apoderadoService.addApoderado(apoderado);
 	}
 
@@ -100,6 +87,12 @@ public class TesisController {
 	@GetMapping("/hijos")
 	public List<HijoEntity> getHijos() {
 		List<HijoEntity> hijos = hijoService.findAll();
+		return hijos;
+	}
+
+	@GetMapping("/hijo/{dniApoderado}")
+	public List<HijoEntity> getHijosPorApoderado(@PathVariable String dniApoderado) {
+		List<HijoEntity> hijos = hijoService.findByDniPadre(dniApoderado);
 		return hijos;
 	}
 

@@ -1,25 +1,20 @@
 package com.tesis.vacuna.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "nivelsocioeconomico")
+@Table(name = "nivelSocioeconomico")
 public class NivelSocioEconomicoEntity {
 
-	@Column(name = "valor")
 	@Id
 	private String valor;
 
-	@Column(name = "descripcion")
 	private String descripcion;
 	
-	@Column(name = "ingresopromedio")
 	private Integer ingresoPromedio;
 	
-	@Column(name = "tipovivienda")
 	private String tipoVivienda;
 
 	public String getValor() {

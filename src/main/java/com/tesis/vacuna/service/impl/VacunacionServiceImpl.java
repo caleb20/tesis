@@ -69,7 +69,7 @@ public class VacunacionServiceImpl implements VacunacionService {
 		for (Integer edadAplicacion : set) {
 			GrupoVacunaDTO grupoVacunaDTO = new GrupoVacunaDTO();
 			EdadAplicaEntity edadAplicaEntity = edadAplicaService.findById(edadAplicacion);
-			grupoVacunaDTO.setIdEdadAplica(edadAplicaEntity.getIdEdadAplica());
+			grupoVacunaDTO.setId(edadAplicaEntity.getId());
 			grupoVacunaDTO.setEdadAplica(edadAplicaEntity.getDescripcion());
 			grupoVacunaDTOs.add(grupoVacunaDTO);
 		}

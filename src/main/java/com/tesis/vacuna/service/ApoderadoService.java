@@ -2,12 +2,12 @@ package com.tesis.vacuna.service;
 
 import java.util.List;
 
+import com.tesis.vacuna.dto.ApoderadoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
-import com.tesis.vacuna.entity.ApoderadoEntity;
 
 public interface ApoderadoService {
 
-	List<ApoderadoEntity> listApoderados();
+	List<ApoderadoDTO> listApoderados();
 
-	MessageDTO addApoderado(ApoderadoEntity apoderadoEntity);
+	MessageDTO addApoderado(ApoderadoDTO apoderadoDTO);
 }

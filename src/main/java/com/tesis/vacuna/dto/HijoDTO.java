@@ -1,23 +1,12 @@
-package com.tesis.vacuna.entity;
+package com.tesis.vacuna.dto;
 
-import java.util.Date;
+public class HijoDTO {
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "hijo")
-public class HijoEntity {
-
-	@Id
 	private String dni;
-
 	private String nombres;
-
 	private String apellidos;
-
-	private Date fechaNacimiento;
+	private String fechaNacimiento;
+	private String dniPadre;
 
 	public String getDni() {
 		return dni;
@@ -43,12 +32,20 @@ public class HijoEntity {
 		this.apellidos = apellidos;
 	}
 
-	public Date getFechaNacimiento() {
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getDniPadre() {
+		return dniPadre;
+	}
+
+	public void setDniPadre(String dniPadre) {
+		this.dniPadre = dniPadre;
 	}
 
 }

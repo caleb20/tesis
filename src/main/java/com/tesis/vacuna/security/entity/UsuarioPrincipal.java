@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsuarioPrincipal implements UserDetails {
-	private String nombre;
-	private String nombreUsuario;
+	private String nombresApellidos;
+	private String dni;
 	private String email;
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UsuarioPrincipal(String nombre, String nombreUsuario, String email, String password,
+	public UsuarioPrincipal(String nombresApellidos, String dni, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
-		this.nombre = nombre;
-		this.nombreUsuario = nombreUsuario;
+		this.nombresApellidos = nombresApellidos;
+		this.dni = dni;
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
@@ -27,7 +27,7 @@ public class UsuarioPrincipal implements UserDetails {
 	public static UsuarioPrincipal build(Usuario usuario) {
 		List<GrantedAuthority> authorities = usuario.getRoles().stream()
 				.map(rol -> new SimpleGrantedAuthority(rol.getRolNombre().name())).collect(Collectors.toList());
-		return new UsuarioPrincipal(usuario.getNombre(), usuario.getNombreUsuario(), usuario.getEmail(),
+		return new UsuarioPrincipal(usuario.getNombresApellidos(), usuario.getDni(), usuario.getEmail(),
 				usuario.getPassword(), authorities);
 	}
 
@@ -43,7 +43,7 @@ public class UsuarioPrincipal implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return nombreUsuario;
+		return dni;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class UsuarioPrincipal implements UserDetails {
 	}
 
 	public String getNombre() {
-		return nombre;
+		return nombresApellidos;
 	}
 
 	public String getEmail() {

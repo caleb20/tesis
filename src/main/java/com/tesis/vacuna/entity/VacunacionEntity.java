@@ -2,10 +2,7 @@ package com.tesis.vacuna.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,32 +11,15 @@ import javax.persistence.Table;
 public class VacunacionEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idvacunacion")
-	private Integer idVacunacion;
-
-	@Column(name = "dnihijo")
 	private String dniHijo;
 
-	@Column(name = "idvacuna")
 	private int idVacuna;
 
-	@Column(name = "fecha")
 	private Date fecha;
 
-	@Column(name = "lugar")
 	private String lugar;
 
-	@Column(name = "dnivacunador")
 	private String dniVacunador;
-
-	public Integer getIdVacunacion() {
-		return idVacunacion;
-	}
-
-	public void setIdVacunacion(Integer idVacunacion) {
-		this.idVacunacion = idVacunacion;
-	}
 
 	public String getDniHijo() {
 		return dniHijo;

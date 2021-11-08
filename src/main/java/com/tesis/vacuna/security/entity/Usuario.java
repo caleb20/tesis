@@ -1,24 +1,38 @@
 package com.tesis.vacuna.security.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	@NotNull
-	private String nombre;
+	private String nombresApellidos;
+
 	@NotNull
 	@Column(unique = true)
-	private String nombreUsuario;
+	private String dni;
+
 	@NotNull
 	private String email;
+
 	@NotNull
 	private String password;
+
 	@NotNull
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
@@ -27,10 +41,9 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(@NotNull String nombre, @NotNull String nombreUsuario, @NotNull String email,
-			@NotNull String password) {
-		this.nombre = nombre;
-		this.nombreUsuario = nombreUsuario;
+	public Usuario(@NotNull String nombresApellidos, String dni, @NotNull String email, String password) {
+		this.nombresApellidos = nombresApellidos;
+		this.dni = dni;
 		this.email = email;
 		this.password = password;
 	}
@@ -43,20 +56,20 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getNombresApellidos() {
+		return nombresApellidos;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombresApellidos(String nombresApellidos) {
+		this.nombresApellidos = nombresApellidos;
 	}
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getEmail() {
