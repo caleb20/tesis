@@ -24,4 +24,16 @@ public class Util {
 		return todayWithZeroTime;
 	}
 
+	public static String dateToUnixTime(Date date) {
+
+		String fecha = "";
+
+		if (date != null) {
+			fecha = String.valueOf(date.getTime() / 1000L);
+
+		}
+
+		return fecha;
+
+	}
 }

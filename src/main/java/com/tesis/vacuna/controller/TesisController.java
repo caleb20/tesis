@@ -2,8 +2,6 @@ package com.tesis.vacuna.controller;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +16,7 @@ import com.tesis.vacuna.dto.ApoderadoDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
-import com.tesis.vacuna.entity.ApoderadoEntity;
+import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.entity.EstadoCivilEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.entity.NivelEducacionEntity;
@@ -102,7 +100,7 @@ public class TesisController {
 	}
 
 	@PostMapping("/hijo")
-	public MessageDTO addHijo(@RequestBody HijoEntity hijo) {
+	public MessageDTO addHijo(@RequestBody HijoDTO hijo) {
 		return hijoService.addHijo(hijo);
 	}
 
@@ -120,15 +118,20 @@ public class TesisController {
 	@GetMapping("/vacunaciones")
 	public List<VacunacionEntity> getVacunaciones() {
 		List<VacunacionEntity> vacunaciones = vacunacionService.findAll();
+		return vacunaciones;
+	}
+
+	@GetMapping("/estadoVacunacion/{dniHijo}")
+	public EstadoVacunacionDTO getVacunacionHijo(@PathVariable String dniHijo) {
+		EstadoVacunacionDTO vacunaciones = vacunacionService.findVacunacionByDniHijo(dniHijo);
 
 		return vacunaciones;
 	}
 
-	@GetMapping("/vacunacion/{dniHijo}")
-	public VacunacionDTO getVacunacionHijo(@PathVariable String dniHijo) {
-		VacunacionDTO vacunaciones = vacunacionService.findVacunacionByDniHijo(dniHijo);
+	@PostMapping("/vacunacion")
+	public MessageDTO addVacunacion(@RequestBody VacunacionDTO vacunacionDTO) {
 
-		return vacunaciones;
+		return vacunacionService.save(vacunacionDTO);
 	}
 
 	// COMBOS

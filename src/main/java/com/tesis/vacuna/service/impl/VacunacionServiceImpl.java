@@ -5,12 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tesis.vacuna.dto.GrupoVacunaDTO;
+import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunaDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
+import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.entity.EdadAplicaEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
@@ -20,6 +23,7 @@ import com.tesis.vacuna.service.EdadAplicaService;
 import com.tesis.vacuna.service.HijoService;
 import com.tesis.vacuna.service.VacunaService;
 import com.tesis.vacuna.service.VacunacionService;
+import com.tesis.vacuna.utils.Util;
 
 @Service
 public class VacunacionServiceImpl implements VacunacionService {
@@ -43,11 +47,11 @@ public class VacunacionServiceImpl implements VacunacionService {
 	}
 
 	@Override
-	public VacunacionDTO findVacunacionByDniHijo(String dniHijo) {
+	public EstadoVacunacionDTO findVacunacionByDniHijo(String dniHijo) {
 
 		HijoEntity hijoEntity = hijoService.findById(dniHijo);
 
-		VacunacionDTO vacunacionDTO = new VacunacionDTO();
+		EstadoVacunacionDTO vacunacionDTO = new EstadoVacunacionDTO();
 		vacunacionDTO.setDni(hijoEntity.getDni());
 		vacunacionDTO.setNombres(hijoEntity.getNombres());
 		vacunacionDTO.setApellidos(hijoEntity.getApellidos());
@@ -86,10 +90,23 @@ public class VacunacionServiceImpl implements VacunacionService {
 				vacunaDTO.setTipo(vacunaEntity.getTipo());
 				vacunaDTO.setDescripcion(vacunaEntity.getDescripcion());
 
-				VacunacionEntity vacunacionEntity = findByDniHijoAndIdVacuna(dniHijo, vacunaEntity.getIdVacuna());
+				VacunacionEntity vacunacionEntity = findByDniHijoAndIdVacuna(dniHijo, vacunaEntity.getId());
 
 				if (vacunacionEntity != null) {
-					vacunaDTO.setAplicado(true);
+
+					vacunaDTO.setFechaCita(Util.dateToUnixTime(vacunacionEntity.getFechaCita()));
+					vacunaDTO.setFechaVacunacion(Util.dateToUnixTime(vacunacionEntity.getFecha()));
+					vacunaDTO.setLugar(vacunacionEntity.getLugar());
+					vacunaDTO.setDniVacunador(vacunacionEntity.getDniVacunador());
+					vacunaDTO.setReaccion(vacunacionEntity.getReaccion());
+
+					if (StringUtils.isEmpty(Util.dateToUnixTime(vacunacionEntity.getFecha()))) {
+						vacunaDTO.setAplicado(false);
+
+					} else {
+						vacunaDTO.setAplicado(true);
+
+					}
 				}
 
 				vacunaDTOs.add(vacunaDTO);
@@ -110,6 +127,27 @@ public class VacunacionServiceImpl implements VacunacionService {
 	@Override
 	public VacunacionEntity findByDniHijoAndIdVacuna(String dniHijo, Integer idVacuna) {
 		return vacunacionRepository.findByDniHijoAndIdVacuna(dniHijo, idVacuna);
+	}
+
+	@Override
+	public MessageDTO save(VacunacionDTO vacunacionDTO) {
+
+		VacunacionEntity vacunacionEntity = new VacunacionEntity();
+		vacunacionEntity.setDniHijo(vacunacionDTO.getDni());
+		vacunacionEntity.setIdVacuna(Integer.valueOf(vacunacionDTO.getVacuna()));
+		vacunacionEntity.setFecha(Util.unixTimeToDate(vacunacionDTO.getFechaVacunacion()));
+		vacunacionEntity.setFechaCita(Util.unixTimeToDate(vacunacionDTO.getFechaCita()));
+		vacunacionEntity.setLugar(vacunacionDTO.getLugar());
+		vacunacionEntity.setDniVacunador(vacunacionDTO.getDniVacunador());
+		vacunacionEntity.setReaccion(vacunacionDTO.getReaccion());
+
+		vacunacionRepository.save(vacunacionEntity);
+
+		var messageDTO = new MessageDTO();
+		messageDTO.setOk(true);
+		messageDTO.setMensaje("agregado corectamente");
+
+		return messageDTO;
 	}
 
 }

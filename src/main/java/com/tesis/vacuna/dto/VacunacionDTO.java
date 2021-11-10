@@ -7,7 +7,12 @@ public class VacunacionDTO {
 	private String dni;
 	private String nombres;
 	private String apellidos;
-
+	private String vacuna;
+	private String fechaCita;
+	private String fechaVacunacion;
+	private String lugar;
+	private String dniVacunador;
+	private String reaccion;
 	List<GrupoVacunaDTO> grupoVacunaDTO;
 
 	public String getDni() {
@@ -32,6 +37,54 @@ public class VacunacionDTO {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public String getVacuna() {
+		return vacuna;
+	}
+
+	public void setVacuna(String vacuna) {
+		this.vacuna = vacuna;
+	}
+
+	public String getFechaCita() {
+		return fechaCita;
+	}
+
+	public void setFechaCita(String fechaCita) {
+		this.fechaCita = fechaCita;
+	}
+
+	public String getFechaVacunacion() {
+		return fechaVacunacion;
+	}
+
+	public void setFechaVacunacion(String fechaVacunacion) {
+		this.fechaVacunacion = fechaVacunacion;
+	}
+
+	public String getLugar() {
+		return lugar;
+	}
+
+	public void setLugar(String lugar) {
+		this.lugar = lugar;
+	}
+
+	public String getDniVacunador() {
+		return dniVacunador;
+	}
+
+	public void setDniVacunador(String dniVacunador) {
+		this.dniVacunador = dniVacunador;
+	}
+
+	public String getReaccion() {
+		return reaccion;
+	}
+
+	public void setReaccion(String reaccion) {
+		this.reaccion = reaccion;
 	}
 
 	public List<GrupoVacunaDTO> getGrupoVacunaDTO() {

@@ -13,30 +13,25 @@ public class VacunaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idvacuna")
-	private Integer idVacuna;
+	@Column(name = "id")
+	private Integer id;
 
-	@Column(name = "idedadaplica")
 	private Integer idEdadAplica;
 
-	@Column(name = "edadaplica")
 	private String edadAplica;
 
-	@Column(name = "categoria")
 	private String categoria;
 
-	@Column(name = "tipo")
 	private String tipo;
 
-	@Column(name = "descripcion")
 	private String descripcion;
 
-	public Integer getIdVacuna() {
-		return idVacuna;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdVacuna(Integer idVacuna) {
-		this.idVacuna = idVacuna;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getIdEdadAplica() {
