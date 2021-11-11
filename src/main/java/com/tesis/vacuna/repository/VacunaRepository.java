@@ -10,8 +10,6 @@ import com.tesis.vacuna.entity.VacunaEntity;
 @Repository
 public interface VacunaRepository extends JpaRepository<VacunaEntity, Integer> {
 
-	List<VacunaEntity> findByEdadAplica(String edadAplica);
-	
 	List<VacunaEntity> findByIdEdadAplica(Integer idEdadAplica);
-	
+
 }

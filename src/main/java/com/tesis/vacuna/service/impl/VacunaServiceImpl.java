@@ -20,10 +20,10 @@ public class VacunaServiceImpl implements VacunaService {
 		return vacunaRepository.findAll();
 	}
 
-	@Override
-	public List<VacunaEntity> findByEdadAplica(String edadAplica) {
-		return vacunaRepository.findByEdadAplica(edadAplica);
-	}
+//	@Override
+//	public List<VacunaEntity> findByEdadAplica(String edadAplica) {
+//		return vacunaRepository.findByEdadAplica(edadAplica);
+//	}
 
 	@Override
 	public VacunaEntity findById(Integer idVacunacion) {

@@ -1,15 +1,23 @@
 package com.tesis.vacuna.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tesis.vacuna.dto.ApoderadoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.repository.ApoderadoRepository;
+import com.tesis.vacuna.security.entity.Rol;
+import com.tesis.vacuna.security.entity.Usuario;
+import com.tesis.vacuna.security.enums.RolNombre;
+import com.tesis.vacuna.security.service.RolService;
+import com.tesis.vacuna.security.service.UsuarioService;
 import com.tesis.vacuna.service.ApoderadoHijoService;
 import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.utils.Util;
@@ -22,6 +30,15 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 
 	@Autowired
 	ApoderadoHijoService apoderadoHijoService;
+
+	@Autowired
+	UsuarioService usuarioService;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	RolService rolService;
 
 	@Override
 	public List<ApoderadoDTO> listApoderados() {
@@ -37,7 +54,7 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 				apoderadoDTO.setDni(apoderadoEntity.getDni());
 				apoderadoDTO.setNombres(apoderadoEntity.getNombres());
 				apoderadoDTO.setApellidos(apoderadoEntity.getApellidos());
-				apoderadoDTO.setFechaNacimiento(String.valueOf(apoderadoEntity.getFechaNacimiento().getTime() / 1000L));
+				apoderadoDTO.setFechaNacimiento(Util.dateToUnixTime(apoderadoEntity.getFechaNacimiento()));
 				apoderadoDTO.setCelular(apoderadoEntity.getCelular());
 				apoderadoDTO.setCorreo(apoderadoEntity.getCorreo());
 				apoderadoDTO.setSexo(apoderadoEntity.getSexo());
@@ -58,27 +75,46 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 	@Override
 	public MessageDTO addApoderado(ApoderadoDTO apoderadoDTO) {
 
-		var apoderadoEntity = new ApoderadoEntity();
-		apoderadoEntity.setDni(apoderadoDTO.getDni());
-		apoderadoEntity.setNombres(apoderadoDTO.getNombres());
-		apoderadoEntity.setApellidos(apoderadoDTO.getApellidos());
-		apoderadoEntity.setFechaNacimiento(Util.unixTimeToDate(apoderadoDTO.getFechaNacimiento()));
-		apoderadoEntity.setCelular(apoderadoDTO.getCelular());
-		apoderadoEntity.setCorreo(apoderadoDTO.getCorreo());
-		apoderadoEntity.setSexo(apoderadoDTO.getSexo());
-		apoderadoEntity.setEstadoCivil(apoderadoDTO.getEstadoCivil());
-		apoderadoEntity.setNivelEducacion(apoderadoDTO.getNivelEducacion());
-		apoderadoEntity.setTipoTrabajo(apoderadoDTO.getTipoTrabajo());
-		apoderadoEntity.setNivelSocioeconomico(apoderadoDTO.getNivelSocioeconomico());
-		apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
+		if (apoderadoRepository.findById(apoderadoDTO.getDni()).isEmpty()) {
+			var apoderadoEntity = new ApoderadoEntity();
+			apoderadoEntity.setDni(apoderadoDTO.getDni());
+			apoderadoEntity.setNombres(apoderadoDTO.getNombres());
+			apoderadoEntity.setApellidos(apoderadoDTO.getApellidos());
+			apoderadoEntity.setFechaNacimiento(Util.unixTimeToDate(apoderadoDTO.getFechaNacimiento()));
+			apoderadoEntity.setCelular(apoderadoDTO.getCelular());
+			apoderadoEntity.setCorreo(apoderadoDTO.getCorreo());
+			apoderadoEntity.setSexo(apoderadoDTO.getSexo());
+			apoderadoEntity.setEstadoCivil(apoderadoDTO.getEstadoCivil());
+			apoderadoEntity.setNivelEducacion(apoderadoDTO.getNivelEducacion());
+			apoderadoEntity.setTipoTrabajo(apoderadoDTO.getTipoTrabajo());
+			apoderadoEntity.setNivelSocioeconomico(apoderadoDTO.getNivelSocioeconomico());
+			apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
 
-		apoderadoRepository.save(apoderadoEntity);
+			apoderadoRepository.save(apoderadoEntity);
 
-		var messageDTO = new MessageDTO();
-		messageDTO.setOk(true);
-		messageDTO.setMensaje("agregado corectamente");
+			var messageDTO = new MessageDTO();
+			messageDTO.setOk(true);
+			messageDTO.setMensaje("agregado corectamente");
 
-		return messageDTO;
+			Usuario usuario = new Usuario(apoderadoDTO.getNombres().concat(" ").concat(apoderadoDTO.getApellidos()),
+					apoderadoEntity.getDni(), apoderadoEntity.getCorreo(), passwordEncoder.encode("abcd1234"));
+			Set<Rol> roles = new HashSet<>();
+			roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
+			usuario.setRoles(roles);
+
+			usuarioService.save(usuario);
+
+			return messageDTO;
+
+		} else {
+
+			var messageDTO = new MessageDTO();
+			messageDTO.setOk(false);
+			messageDTO.setMensaje("usuario duplicado");
+			return messageDTO;
+
+		}
+
 	}
 
 }

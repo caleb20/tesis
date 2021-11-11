@@ -11,7 +11,7 @@ public class GrupoVacunaDTO {
 	private String edadAplica;
 	private List<VacunaDTO> vacunaDTO;
 
-	public Integer getIdEdadAplica() {
+	public Integer getId() {
 		return id;
 	}
 

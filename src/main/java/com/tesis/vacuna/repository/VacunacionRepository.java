@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.tesis.vacuna.entity.VacunacionEntity;
 
 @Repository
-public interface VacunacionRepository extends JpaRepository<VacunacionEntity, Long> {
+public interface VacunacionRepository extends JpaRepository<VacunacionEntity, Integer> {
 
 	List<VacunacionEntity> findByDniHijo(String dniHijo);
 

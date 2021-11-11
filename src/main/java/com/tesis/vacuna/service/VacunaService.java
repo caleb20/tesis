@@ -8,7 +8,7 @@ public interface VacunaService {
 
 	List<VacunaEntity> findAll();
 
-	List<VacunaEntity> findByEdadAplica(String edadAplica);
+//	List<VacunaEntity> findByEdadAplica(String edadAplica);
 
 	VacunaEntity findById(Integer idVacunacion);
 	

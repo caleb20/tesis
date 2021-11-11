@@ -1,8 +1,11 @@
 package com.tesis.vacuna.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tesis.vacuna.dto.HijoDTO;
@@ -11,6 +14,11 @@ import com.tesis.vacuna.entity.ApoderadoHijoEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.repository.ApoderadoHijoRepository;
 import com.tesis.vacuna.repository.HijoRepository;
+import com.tesis.vacuna.security.entity.Rol;
+import com.tesis.vacuna.security.entity.Usuario;
+import com.tesis.vacuna.security.enums.RolNombre;
+import com.tesis.vacuna.security.service.RolService;
+import com.tesis.vacuna.security.service.UsuarioService;
 import com.tesis.vacuna.service.HijoService;
 import com.tesis.vacuna.utils.Util;
 
@@ -23,6 +31,15 @@ public class HijoServiceImpl implements HijoService {
 	@Autowired
 	ApoderadoHijoRepository apoderadoHijoRepository;
 
+	@Autowired
+	UsuarioService usuarioService;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	RolService rolService;
+
 	@Override
 	public List<HijoEntity> findAll() {
 
@@ -32,32 +49,44 @@ public class HijoServiceImpl implements HijoService {
 	@Override
 	public MessageDTO addHijo(HijoDTO hijoDTO) {
 
-		HijoEntity hijoEntity = new HijoEntity();
-		hijoEntity.setDni(hijoDTO.getDni());
-		hijoEntity.setNombres(hijoDTO.getNombres());
-		hijoEntity.setApellidos(hijoDTO.getApellidos());
-		hijoEntity.setFechaNacimiento(Util.unixTimeToDate(hijoDTO.getFechaNacimiento()));
+		if (hijoRepository.findById(hijoDTO.getDni()).isEmpty()) {
 
-		hijoRepository.save(hijoEntity);
+			HijoEntity hijoEntity = new HijoEntity();
+			hijoEntity.setDni(hijoDTO.getDni());
+			hijoEntity.setNombres(hijoDTO.getNombres());
+			hijoEntity.setApellidos(hijoDTO.getApellidos());
+			hijoEntity.setFechaNacimiento(Util.unixTimeToDate(hijoDTO.getFechaNacimiento()));
 
-		ApoderadoHijoEntity apoderadoHijoEntity = new ApoderadoHijoEntity();
-		apoderadoHijoEntity.setDniApoderado(hijoDTO.getDniPadre());
-		apoderadoHijoEntity.setDniHijo(hijoDTO.getDni());
+			hijoRepository.save(hijoEntity);
 
-		apoderadoHijoRepository.save(apoderadoHijoEntity);
+			ApoderadoHijoEntity apoderadoHijoEntity = new ApoderadoHijoEntity();
+			apoderadoHijoEntity.setDniApoderado(hijoDTO.getDniPadre());
+			apoderadoHijoEntity.setDniHijo(hijoDTO.getDni());
 
-		MessageDTO messageDTO = new MessageDTO();
-		messageDTO.setOk(true);
-		messageDTO.setMensaje("agregado corectamente");
+			apoderadoHijoRepository.save(apoderadoHijoEntity);
 
-		return messageDTO;
+			MessageDTO messageDTO = new MessageDTO();
+			messageDTO.setOk(true);
+			messageDTO.setMensaje("agregado corectamente");
+
+			Usuario usuario = new Usuario(hijoDTO.getNombres().concat(" ").concat(hijoDTO.getApellidos()),
+					hijoDTO.getDni(), "", passwordEncoder.encode("abcd1234"));
+			Set<Rol> roles = new HashSet<>();
+			roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
+			usuario.setRoles(roles);
+
+			usuarioService.save(usuario);
+
+			return messageDTO;
+		}
+
+		else {
+			var messageDTO = new MessageDTO();
+			messageDTO.setOk(false);
+			messageDTO.setMensaje("Hijo ya registrado");
+			return messageDTO;
+		}
 	}
-
-//	@Override
-//	public List<HijoEntity> findByDniPadre(String dniPadre) {
-//
-//		return hijoRepository.findByDniPadre(dniPadre);
-//	}
 
 	@Override
 	public HijoEntity findById(String dniHijo) {

@@ -13,6 +13,7 @@ import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.repository.ApoderadoHijoRepository;
 import com.tesis.vacuna.repository.HijoRepository;
 import com.tesis.vacuna.service.ApoderadoHijoService;
+import com.tesis.vacuna.utils.Util;
 
 @Service
 public class ApoderadoHijoServiceImpl implements ApoderadoHijoService {
@@ -47,7 +48,7 @@ public class ApoderadoHijoServiceImpl implements ApoderadoHijoService {
 				hijoDTO.setDni(hijoEntity.get().getDni());
 				hijoDTO.setNombres(hijoEntity.get().getNombres());
 				hijoDTO.setApellidos(hijoEntity.get().getApellidos());
-				hijoDTO.setFechaNacimiento(String.valueOf(hijoEntity.get().getFechaNacimiento().getTime() / 1000L));
+				hijoDTO.setFechaNacimiento(Util.dateToUnixTime(hijoEntity.get().getFechaNacimiento()));
 				hijoDTOs.add(hijoDTO);
 
 			}

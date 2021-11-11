@@ -27,7 +27,6 @@ public class Usuario {
 	@Column(unique = true)
 	private String dni;
 
-	@NotNull
 	private String email;
 
 	@NotNull
@@ -41,7 +40,7 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(@NotNull String nombresApellidos, String dni, @NotNull String email, String password) {
+	public Usuario(@NotNull String nombresApellidos, String dni, String email, String password) {
 		this.nombresApellidos = nombresApellidos;
 		this.dni = dni;
 		this.email = email;

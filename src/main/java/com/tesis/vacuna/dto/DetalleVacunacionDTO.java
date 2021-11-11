@@ -1,11 +1,8 @@
 package com.tesis.vacuna.dto;
 
-public class VacunaDTO {
+public class DetalleVacunacionDTO {
 
-	private Integer idVacunacion;
-	private Integer idVacuna;
-	private String nombreVacuna;
-	private String enfermedadesPreviene;
+	private String tipo;
 	private String descripcion;
 	private boolean aplicado;
 	private String fechaCita;
@@ -14,36 +11,12 @@ public class VacunaDTO {
 	private String dniVacunador;
 	private String reaccion;
 
-	public Integer getIdVacunacion() {
-		return idVacunacion;
+	public String getTipo() {
+		return tipo;
 	}
 
-	public void setIdVacunacion(Integer idVacunacion) {
-		this.idVacunacion = idVacunacion;
-	}
-
-	public Integer getIdVacuna() {
-		return idVacuna;
-	}
-
-	public void setIdVacuna(Integer idVacuna) {
-		this.idVacuna = idVacuna;
-	}
-
-	public String getNombreVacuna() {
-		return nombreVacuna;
-	}
-
-	public void setNombreVacuna(String nombreVacuna) {
-		this.nombreVacuna = nombreVacuna;
-	}
-
-	public String getEnfermedadesPreviene() {
-		return enfermedadesPreviene;
-	}
-
-	public void setEnfermedadesPreviene(String enfermedadesPreviene) {
-		this.enfermedadesPreviene = enfermedadesPreviene;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	public String getDescripcion() {

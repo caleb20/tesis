@@ -18,11 +18,9 @@ public class VacunaEntity {
 
 	private Integer idEdadAplica;
 
-	private String edadAplica;
+	private String nombreVacuna;
 
-	private String categoria;
-
-	private String tipo;
+	private String enfermedadesPreviene;
 
 	private String descripcion;
 
@@ -42,28 +40,20 @@ public class VacunaEntity {
 		this.idEdadAplica = idEdadAplica;
 	}
 
-	public String getEdadAplica() {
-		return edadAplica;
+	public String getNombreVacuna() {
+		return nombreVacuna;
 	}
 
-	public void setEdadAplica(String edadAplica) {
-		this.edadAplica = edadAplica;
+	public void setNombreVacuna(String nombreVacuna) {
+		this.nombreVacuna = nombreVacuna;
 	}
 
-	public String getCategoria() {
-		return categoria;
+	public String getEnfermedadesPreviene() {
+		return enfermedadesPreviene;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setEnfermedadesPreviene(String enfermedadesPreviene) {
+		this.enfermedadesPreviene = enfermedadesPreviene;
 	}
 
 	public String getDescripcion() {

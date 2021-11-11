@@ -7,6 +7,7 @@ public class EstadoVacunacionDTO {
 	private String dni;
 	private String nombres;
 	private String apellidos;
+	private String fechaNacimiento;
 
 	List<GrupoVacunaDTO> grupoVacunaDTO;
 
@@ -40,6 +41,14 @@ public class EstadoVacunacionDTO {
 
 	public void setGrupoVacunaDTO(List<GrupoVacunaDTO> grupoVacunaDTO) {
 		this.grupoVacunaDTO = grupoVacunaDTO;
+	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 }

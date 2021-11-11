@@ -1,6 +1,7 @@
 package com.tesis.vacuna.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +56,7 @@ public class VacunacionServiceImpl implements VacunacionService {
 		vacunacionDTO.setDni(hijoEntity.getDni());
 		vacunacionDTO.setNombres(hijoEntity.getNombres());
 		vacunacionDTO.setApellidos(hijoEntity.getApellidos());
+		vacunacionDTO.setFechaNacimiento(Util.dateToUnixTime(hijoEntity.getFechaNacimiento()));
 
 		List<GrupoVacunaDTO> grupoVacunaDTOs = new ArrayList<>();
 
@@ -80,20 +82,21 @@ public class VacunacionServiceImpl implements VacunacionService {
 
 		for (GrupoVacunaDTO grupoVacunaDTO : grupoVacunaDTOs) {
 
-			List<VacunaEntity> vacunasEntities = vacunaService.findByIdEdadAplica(grupoVacunaDTO.getIdEdadAplica());
+			List<VacunaEntity> vacunasEntities = vacunaService.findByIdEdadAplica(grupoVacunaDTO.getId());
 			List<VacunaDTO> vacunaDTOs = new ArrayList<>();
 
 			for (VacunaEntity vacunaEntity : vacunasEntities) {
 				VacunaDTO vacunaDTO = new VacunaDTO();
 
-				vacunaDTO.setCategoria(vacunaEntity.getCategoria());
-				vacunaDTO.setTipo(vacunaEntity.getTipo());
+				vacunaDTO.setIdVacuna(vacunaEntity.getId());
+				vacunaDTO.setNombreVacuna(vacunaEntity.getNombreVacuna());
+				vacunaDTO.setEnfermedadesPreviene(vacunaEntity.getEnfermedadesPreviene());
 				vacunaDTO.setDescripcion(vacunaEntity.getDescripcion());
 
 				VacunacionEntity vacunacionEntity = findByDniHijoAndIdVacuna(dniHijo, vacunaEntity.getId());
 
 				if (vacunacionEntity != null) {
-
+					vacunaDTO.setIdVacunacion(vacunacionEntity.getId());
 					vacunaDTO.setFechaCita(Util.dateToUnixTime(vacunacionEntity.getFechaCita()));
 					vacunaDTO.setFechaVacunacion(Util.dateToUnixTime(vacunacionEntity.getFecha()));
 					vacunaDTO.setLugar(vacunacionEntity.getLugar());
@@ -133,19 +136,35 @@ public class VacunacionServiceImpl implements VacunacionService {
 	public MessageDTO save(VacunacionDTO vacunacionDTO) {
 
 		VacunacionEntity vacunacionEntity = new VacunacionEntity();
+
+		if (vacunacionDTO.getIdVacunacion() != null) {
+			vacunacionEntity = vacunacionRepository.findById(vacunacionDTO.getIdVacunacion()).get();
+			vacunacionEntity.setId(vacunacionDTO.getIdVacunacion());
+		}
+
+		vacunacionEntity.setLote(vacunacionDTO.getLote());
 		vacunacionEntity.setDniHijo(vacunacionDTO.getDni());
 		vacunacionEntity.setIdVacuna(Integer.valueOf(vacunacionDTO.getVacuna()));
-		vacunacionEntity.setFecha(Util.unixTimeToDate(vacunacionDTO.getFechaVacunacion()));
-		vacunacionEntity.setFechaCita(Util.unixTimeToDate(vacunacionDTO.getFechaCita()));
+		vacunacionEntity.setFechaCita(vacunacionEntity.getFechaCita());
+		vacunacionEntity.setFecha(new Date());
 		vacunacionEntity.setLugar(vacunacionDTO.getLugar());
 		vacunacionEntity.setDniVacunador(vacunacionDTO.getDniVacunador());
 		vacunacionEntity.setReaccion(vacunacionDTO.getReaccion());
+		vacunacionEntity.setEstado("1");
 
 		vacunacionRepository.save(vacunacionEntity);
 
 		var messageDTO = new MessageDTO();
 		messageDTO.setOk(true);
 		messageDTO.setMensaje("agregado corectamente");
+
+		VacunacionEntity vacunacionEntitySiguiente = new VacunacionEntity();
+		vacunacionEntitySiguiente.setDniHijo(vacunacionDTO.getDni());
+		vacunacionEntitySiguiente.setIdVacuna(Integer.valueOf(vacunacionDTO.getVacuna()) + 1);
+		vacunacionEntitySiguiente.setFechaCita(Util.unixTimeToDate(vacunacionDTO.getFechaCita()));
+		vacunacionEntitySiguiente.setEstado("2");
+
+		vacunacionRepository.save(vacunacionEntitySiguiente);
 
 		return messageDTO;
 	}

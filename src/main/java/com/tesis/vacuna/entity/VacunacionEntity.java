@@ -18,6 +18,8 @@ public class VacunacionEntity {
 	@Column(name = "id")
 	private Integer id;
 
+	private String lote;
+
 	private String dniHijo;
 
 	private int idVacuna;
@@ -32,12 +34,22 @@ public class VacunacionEntity {
 
 	private String reaccion;
 
+	private String estado;
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	public String getDniHijo() {
@@ -94,6 +106,14 @@ public class VacunacionEntity {
 
 	public void setReaccion(String reaccion) {
 		this.reaccion = reaccion;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 }

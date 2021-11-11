@@ -4,6 +4,9 @@ import java.util.List;
 
 public class VacunacionDTO {
 
+	private Integer idVacunacion;
+	private Integer idVacuna;
+	private String lote;
 	private String dni;
 	private String nombres;
 	private String apellidos;
@@ -13,7 +16,32 @@ public class VacunacionDTO {
 	private String lugar;
 	private String dniVacunador;
 	private String reaccion;
+
 	List<GrupoVacunaDTO> grupoVacunaDTO;
+
+	public Integer getIdVacunacion() {
+		return idVacunacion;
+	}
+
+	public void setIdVacunacion(Integer idVacunacion) {
+		this.idVacunacion = idVacunacion;
+	}
+
+	public Integer getIdVacuna() {
+		return idVacuna;
+	}
+
+	public void setIdVacuna(Integer idVacuna) {
+		this.idVacuna = idVacuna;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
 
 	public String getDni() {
 		return dni;
