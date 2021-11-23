@@ -1,5 +1,6 @@
 package com.tesis.vacuna.security.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import com.tesis.vacuna.security.service.UsuarioService;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -58,12 +60,21 @@ public class AuthController {
 		Usuario usuario = new Usuario(nuevoUsuario.getNombresApellidos(), nuevoUsuario.getDni(),
 				nuevoUsuario.getEmail(), passwordEncoder.encode(nuevoUsuario.getPassword()));
 		Set<Rol> roles = new HashSet<>();
-		if (nuevoUsuario.getRoles().contains("admin"))
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
-		if (nuevoUsuario.getRoles().contains("medico"))
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_MEDICO).get());
-		if (nuevoUsuario.getRoles().contains("user"))
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
+		if (nuevoUsuario.getRoles().contains("admin")) {
+			Optional<Rol> rolAdmin = rolService.getByRolNombre(RolNombre.ROLE_ADMIN);
+			if (rolAdmin.isPresent())
+				roles.add(rolAdmin.get());
+		}
+		if (nuevoUsuario.getRoles().contains("medico")) {
+			Optional<Rol> rolMedico = rolService.getByRolNombre(RolNombre.ROLE_MEDICO);
+			if (rolMedico.isPresent())
+				roles.add(rolMedico.get());
+		}
+		if (nuevoUsuario.getRoles().contains("user")) {
+			Optional<Rol> rolUser = rolService.getByRolNombre(RolNombre.ROLE_USER);
+			if (rolUser.isPresent())
+				roles.add(rolUser.get());
+		}
 		usuario.setRoles(roles);
 		usuarioService.save(usuario);
 		return new ResponseEntity(new Mensaje("usuario guardado"), HttpStatus.CREATED);
@@ -73,16 +84,47 @@ public class AuthController {
 	public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			return new ResponseEntity(new Mensaje("campos mal puestos"), HttpStatus.BAD_REQUEST);
+
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginUsuario.getDni(), loginUsuario.getPassword()));
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(),
-				usuarioService.getByDni(loginUsuario.getDni()).get().getNombresApellidos(),
-				userDetails.getAuthorities());
+
+		Optional<Usuario> usuario = usuarioService.getByDni(loginUsuario.getDni());
+
+		String nombreApellidos = "";
+		if (usuario.isPresent()) {
+			nombreApellidos = usuario.get().getNombresApellidos();
+		}
+
+		JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), nombreApellidos, userDetails.getAuthorities());
 		return new ResponseEntity(jwtDto, HttpStatus.OK);
 	}
-	
-	
+
+	@PostMapping("/login/usuario")
+	public ResponseEntity<JwtDto> loginUsuario(@Valid @RequestBody LoginUsuario loginUsuario,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors())
+			return new ResponseEntity(new Mensaje("campos mal puestos"), HttpStatus.BAD_REQUEST);
+
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginUsuario.getDni(), loginUsuario.getFechaNacimiento()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtProvider.generateToken(authentication);
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+		Optional<Usuario> usuario = usuarioService.getByDni(loginUsuario.getDni());
+
+		String nombreApellidos = "";
+		if (usuario.isPresent()) {
+			nombreApellidos = usuario.get().getNombresApellidos();
+		}
+
+		JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), nombreApellidos, userDetails.getAuthorities());
+		return new ResponseEntity(jwtDto, HttpStatus.OK);
+	}
+
 }

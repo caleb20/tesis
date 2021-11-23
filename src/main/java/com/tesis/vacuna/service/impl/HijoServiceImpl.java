@@ -2,6 +2,7 @@ package com.tesis.vacuna.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,11 @@ public class HijoServiceImpl implements HijoService {
 			Usuario usuario = new Usuario(hijoDTO.getNombres().concat(" ").concat(hijoDTO.getApellidos()),
 					hijoDTO.getDni(), "", passwordEncoder.encode("abcd1234"));
 			Set<Rol> roles = new HashSet<>();
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
+
+			Optional<Rol> rolUser = rolService.getByRolNombre(RolNombre.ROLE_USER);
+			if (rolUser.isPresent())
+				roles.add(rolUser.get());
+
 			usuario.setRoles(roles);
 
 			usuarioService.save(usuario);

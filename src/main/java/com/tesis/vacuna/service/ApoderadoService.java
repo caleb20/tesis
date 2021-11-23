@@ -7,7 +7,9 @@ import com.tesis.vacuna.dto.MessageDTO;
 
 public interface ApoderadoService {
 
-	List<ApoderadoDTO> listApoderados();
+	List<ApoderadoDTO> listMedicos();
+
+	List<ApoderadoDTO> findByHabilitado(Boolean habilitado);
 
 	MessageDTO addApoderado(ApoderadoDTO apoderadoDTO);
 }

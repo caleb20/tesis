@@ -1,5 +1,8 @@
 package com.tesis.vacuna.dto;
 
+import java.util.List;
+import java.util.Set;
+
 public class ApoderadoDTO {
 
 	private String dni;
@@ -15,6 +18,9 @@ public class ApoderadoDTO {
 	private String nivelSocioeconomico;
 	private String tipoPoblacion;
 	private Integer numeroHijos;
+	private List<String> roles;
+	private Boolean habilitado;
+	private Boolean baja;
 
 	public String getDni() {
 		return dni;
@@ -118,6 +124,30 @@ public class ApoderadoDTO {
 
 	public void setNumeroHijos(Integer numeroHijos) {
 		this.numeroHijos = numeroHijos;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public Boolean getBaja() {
+		return baja;
+	}
+
+	public void setBaja(Boolean baja) {
+		this.baja = baja;
 	}
 
 }

@@ -23,6 +23,8 @@ public class ApoderadoEntity {
 	private String tipoTrabajo;
 	private String nivelSocioeconomico;
 	private String tipoPoblacion;
+	private Boolean habilitado;
+	private Boolean baja;
 
 	public String getDni() {
 		return dni;
@@ -118,6 +120,22 @@ public class ApoderadoEntity {
 
 	public void setTipoPoblacion(String tipoPoblacion) {
 		this.tipoPoblacion = tipoPoblacion;
+	}
+
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public Boolean getBaja() {
+		return baja;
+	}
+
+	public void setBaja(Boolean baja) {
+		this.baja = baja;
 	}
 
 }

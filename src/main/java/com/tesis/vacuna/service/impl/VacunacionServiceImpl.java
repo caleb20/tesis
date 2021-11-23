@@ -135,7 +135,7 @@ public class VacunacionServiceImpl implements VacunacionService {
 	@Override
 	public MessageDTO save(VacunacionDTO vacunacionDTO) {
 
-		VacunacionEntity vacunacionEntity = new VacunacionEntity();
+		var vacunacionEntity = new VacunacionEntity();
 
 		if (vacunacionDTO.getIdVacunacion() != null) {
 			vacunacionEntity = vacunacionRepository.findById(vacunacionDTO.getIdVacunacion()).get();

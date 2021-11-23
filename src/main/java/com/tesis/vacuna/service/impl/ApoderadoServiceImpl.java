@@ -3,6 +3,7 @@ package com.tesis.vacuna.service.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 	RolService rolService;
 
 	@Override
-	public List<ApoderadoDTO> listApoderados() {
+	public List<ApoderadoDTO> findByHabilitado(Boolean habilitado) {
 
-		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findAll();
+		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findByHabilitado(habilitado);
 
 		List<ApoderadoDTO> apoderadoDTOs = new ArrayList<>();
 
@@ -63,6 +64,8 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 				apoderadoDTO.setTipoTrabajo(apoderadoEntity.getTipoTrabajo());
 				apoderadoDTO.setNivelSocioeconomico(apoderadoEntity.getNivelSocioeconomico());
 				apoderadoDTO.setTipoPoblacion(apoderadoEntity.getTipoPoblacion());
+				apoderadoDTO.setHabilitado(apoderadoEntity.getHabilitado());
+				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
 				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
 				apoderadoDTOs.add(apoderadoDTO);
 			}
@@ -76,6 +79,9 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 	public MessageDTO addApoderado(ApoderadoDTO apoderadoDTO) {
 
 		if (apoderadoRepository.findById(apoderadoDTO.getDni()).isEmpty()) {
+
+			setUsuario(apoderadoDTO);
+
 			var apoderadoEntity = new ApoderadoEntity();
 			apoderadoEntity.setDni(apoderadoDTO.getDni());
 			apoderadoEntity.setNombres(apoderadoDTO.getNombres());
@@ -89,20 +95,14 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 			apoderadoEntity.setTipoTrabajo(apoderadoDTO.getTipoTrabajo());
 			apoderadoEntity.setNivelSocioeconomico(apoderadoDTO.getNivelSocioeconomico());
 			apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
+			apoderadoEntity.setHabilitado(apoderadoDTO.getHabilitado());
+			apoderadoEntity.setBaja(apoderadoDTO.getBaja());
 
 			apoderadoRepository.save(apoderadoEntity);
 
 			var messageDTO = new MessageDTO();
 			messageDTO.setOk(true);
 			messageDTO.setMensaje("agregado corectamente");
-
-			Usuario usuario = new Usuario(apoderadoDTO.getNombres().concat(" ").concat(apoderadoDTO.getApellidos()),
-					apoderadoEntity.getDni(), apoderadoEntity.getCorreo(), passwordEncoder.encode("abcd1234"));
-			Set<Rol> roles = new HashSet<>();
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
-			usuario.setRoles(roles);
-
-			usuarioService.save(usuario);
 
 			return messageDTO;
 
@@ -115,6 +115,120 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 
 		}
 
+	}
+
+	private void setUsuario(ApoderadoDTO apoderadoDTO) {
+		Set<Rol> roles = new HashSet<>();
+
+		Usuario usuario = new Usuario(apoderadoDTO.getNombres().concat(" ").concat(apoderadoDTO.getApellidos()),
+				apoderadoDTO.getDni(), apoderadoDTO.getCorreo());
+
+		if (apoderadoDTO.getRoles().contains("user")) {
+			Optional<Rol> rolUser = rolService.getByRolNombre(RolNombre.ROLE_USER);
+			if (rolUser.isPresent()) {
+				usuario.setFechaNacimiento(passwordEncoder.encode(apoderadoDTO.getFechaNacimiento()));
+				roles.add(rolUser.get());
+			}
+		}
+
+		if (apoderadoDTO.getRoles().contains("admin")) {
+			Optional<Rol> rolAdmin = rolService.getByRolNombre(RolNombre.ROLE_ADMIN);
+			if (rolAdmin.isPresent()) {
+				usuario.setPassword(passwordEncoder.encode("abcd1234"));
+				roles.add(rolAdmin.get());
+			}
+		}
+		if (apoderadoDTO.getRoles().contains("medico")) {
+			Optional<Rol> rolMedico = rolService.getByRolNombre(RolNombre.ROLE_MEDICO);
+			if (rolMedico.isPresent()) {
+				usuario.setPassword(passwordEncoder.encode("abcd1234"));
+				roles.add(rolMedico.get());
+			}
+		}
+
+		usuario.setRoles(roles);
+
+		usuarioService.save(usuario);
+	}
+
+	@Override
+	public List<ApoderadoDTO> listMedicos() {
+
+		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findAll();
+
+		List<Usuario> rolMedicoEntities = usuarioService.findByRol(RolNombre.ROLE_MEDICO);
+
+		List<ApoderadoEntity> medicosEntities = new ArrayList<>();
+
+		for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
+
+			for (Usuario usuario : rolMedicoEntities) {
+				if (apoderadoEntity.getDni().equals(usuario.getDni())) {
+					medicosEntities.add(apoderadoEntity);
+				}
+			}
+
+		}
+
+		List<ApoderadoDTO> apoderadoDTOs = new ArrayList<>();
+
+		if (!medicosEntities.isEmpty()) {
+
+			for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
+
+				Set<Rol> roles = usuarioService.getByDni(apoderadoEntity.getDni()).get().getRoles();
+
+				List<String> rolesString = setRoles(roles);
+
+				var apoderadoDTO = new ApoderadoDTO();
+				apoderadoDTO.setDni(apoderadoEntity.getDni());
+				apoderadoDTO.setNombres(apoderadoEntity.getNombres());
+				apoderadoDTO.setApellidos(apoderadoEntity.getApellidos());
+				apoderadoDTO.setFechaNacimiento(Util.dateToUnixTime(apoderadoEntity.getFechaNacimiento()));
+				apoderadoDTO.setCelular(apoderadoEntity.getCelular());
+				apoderadoDTO.setCorreo(apoderadoEntity.getCorreo());
+				apoderadoDTO.setSexo(apoderadoEntity.getSexo());
+				apoderadoDTO.setEstadoCivil(apoderadoEntity.getEstadoCivil());
+				apoderadoDTO.setNivelEducacion(apoderadoEntity.getNivelEducacion());
+				apoderadoDTO.setTipoTrabajo(apoderadoEntity.getTipoTrabajo());
+				apoderadoDTO.setNivelSocioeconomico(apoderadoEntity.getNivelSocioeconomico());
+				apoderadoDTO.setTipoPoblacion(apoderadoEntity.getTipoPoblacion());
+				apoderadoDTO.setHabilitado(apoderadoEntity.getHabilitado());
+				apoderadoDTO.setRoles(rolesString);
+				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
+				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
+				apoderadoDTOs.add(apoderadoDTO);
+			}
+
+		}
+
+		return apoderadoDTOs;
+	}
+
+	private List<String> setRoles(Set<Rol> roles) {
+		List<String> rolesString = new ArrayList<>();
+
+		for (Rol rol : roles) {
+
+			String rolNombre = "";
+
+			switch (rol.getRolNombre()) {
+			case ROLE_ADMIN:
+				rolNombre = "admin";
+				break;
+			case ROLE_MEDICO:
+				rolNombre = "medico";
+				break;
+			case ROLE_HIJO:
+				rolNombre = "hijo";
+				break;
+			case ROLE_USER:
+				rolNombre = "user";
+				break;
+			}
+			rolesString.add(rolNombre);
+		}
+		return rolesString;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.tesis.vacuna.security.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +19,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {
-		Usuario usuario = usuarioService.getByDni(dni).get();
-		return UsuarioPrincipal.build(usuario);
+
+		Optional<Usuario> usuario = usuarioService.getByDni(dni);
+
+		if (usuario.isPresent()) {
+			return UsuarioPrincipal.build(usuario.get());
+
+		} else {
+			return null;
+		}
+
 	}
 }

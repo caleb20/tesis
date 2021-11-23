@@ -7,8 +7,9 @@ public class LoginUsuario {
 	@NotBlank
 	private String dni;
 
-	@NotBlank
 	private String password;
+
+	private String fechaNacimiento;
 
 	public String getDni() {
 		return dni;
@@ -25,4 +26,13 @@ public class LoginUsuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
 }

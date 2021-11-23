@@ -1,5 +1,6 @@
 package com.tesis.vacuna.security.entity;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ public class UsuarioPrincipal implements UserDetails {
 	private String dni;
 	private String email;
 	private String password;
+	private String fechaNacimiento;
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UsuarioPrincipal(String nombresApellidos, String dni, String email, String password,
@@ -20,8 +22,9 @@ public class UsuarioPrincipal implements UserDetails {
 		this.nombresApellidos = nombresApellidos;
 		this.dni = dni;
 		this.email = email;
-		this.password = password;
 		this.authorities = authorities;
+		this.password = password;
+
 	}
 
 	public static UsuarioPrincipal build(Usuario usuario) {
@@ -44,6 +47,10 @@ public class UsuarioPrincipal implements UserDetails {
 	@Override
 	public String getUsername() {
 		return dni;
+	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
 	@Override

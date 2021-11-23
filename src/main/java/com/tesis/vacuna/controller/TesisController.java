@@ -25,6 +25,9 @@ import com.tesis.vacuna.entity.TipoPoblacionEntity;
 import com.tesis.vacuna.entity.TipoTrabajoEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
+import com.tesis.vacuna.security.entity.Usuario;
+import com.tesis.vacuna.security.enums.RolNombre;
+import com.tesis.vacuna.security.service.UsuarioService;
 import com.tesis.vacuna.service.ApoderadoHijoService;
 import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.service.EstadoCivilService;
@@ -71,18 +74,33 @@ public class TesisController {
 
 	@Autowired
 	ApoderadoHijoService apoderadoHijoService;
+	
+	@Autowired
+	UsuarioService usuarioService;
 
 	// APODERADO
-
+	
+	/*
 	@GetMapping("/apoderados")
 	public List<ApoderadoDTO> getApoderados() {
 		List<ApoderadoDTO> apoderados = apoderadoService.listApoderados();
 		return apoderados;
 	}
+	*/
+
+	@GetMapping("/apoderados/{habilitado}")
+	public List<ApoderadoDTO> getApoderados(@PathVariable Boolean habilitado) {
+		return apoderadoService.findByHabilitado(habilitado);
+	}
 
 	@PostMapping("/apoderado")
 	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) {
 		return apoderadoService.addApoderado(apoderado);
+	}
+	
+	@GetMapping("/medicos")
+	public List<ApoderadoDTO> getMedicos() {
+		return apoderadoService.listMedicos();
 	}
 
 	// HIJO

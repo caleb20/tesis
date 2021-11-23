@@ -29,8 +29,9 @@ public class Usuario {
 
 	private String email;
 
-	@NotNull
 	private String password;
+
+	private String fechaNacimiento;
 
 	@NotNull
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -40,11 +41,26 @@ public class Usuario {
 	public Usuario() {
 	}
 
+	public Usuario(@NotNull String nombresApellidos, String dni, String email) {
+		this.nombresApellidos = nombresApellidos;
+		this.dni = dni;
+		this.email = email;
+	}
+
 	public Usuario(@NotNull String nombresApellidos, String dni, String email, String password) {
 		this.nombresApellidos = nombresApellidos;
 		this.dni = dni;
 		this.email = email;
 		this.password = password;
+	}
+
+	public Usuario(@NotNull String nombresApellidos, String dni, String email, String password,
+			String fechaNacimiento) {
+		this.nombresApellidos = nombresApellidos;
+		this.dni = dni;
+		this.email = email;
+		this.password = password;
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public int getId() {
@@ -94,4 +110,13 @@ public class Usuario {
 	public void setRoles(Set<Rol> roles) {
 		this.roles = roles;
 	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
 }
