@@ -1,5 +1,6 @@
 package com.tesis.vacuna.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.tesis.vacuna.dto.ApoderadoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
+import com.tesis.vacuna.jdbc.repository.RolJdbcRepository;
 import com.tesis.vacuna.repository.ApoderadoRepository;
 import com.tesis.vacuna.security.entity.Rol;
 import com.tesis.vacuna.security.entity.Usuario;
@@ -41,16 +43,35 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 	@Autowired
 	RolService rolService;
 
+	@Autowired
+	RolJdbcRepository rolJdbcRepository;
+
 	@Override
 	public List<ApoderadoDTO> findByHabilitado(Boolean habilitado) {
 
 		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findByHabilitado(habilitado);
 
+		List<Usuario> rolApoderadoEntities = usuarioService.findByRol(RolNombre.ROLE_USER);
+
+		List<ApoderadoEntity> usuariosEntities = new ArrayList<ApoderadoEntity>();
+
+		for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
+			for (Usuario usuario : rolApoderadoEntities) {
+				if (apoderadoEntity.getDni().equals(usuario.getDni())) {
+					usuariosEntities.add(apoderadoEntity);
+				}
+
+			}
+		}
+
 		List<ApoderadoDTO> apoderadoDTOs = new ArrayList<>();
 
-		if (!apoderadoEntities.isEmpty()) {
+		if (!usuariosEntities.isEmpty()) {
 
-			for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
+			for (ApoderadoEntity apoderadoEntity : usuariosEntities) {
+
+				List<String> rolesString = validateRoles(apoderadoEntity);
+
 				var apoderadoDTO = new ApoderadoDTO();
 				apoderadoDTO.setDni(apoderadoEntity.getDni());
 				apoderadoDTO.setNombres(apoderadoEntity.getNombres());
@@ -65,6 +86,7 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 				apoderadoDTO.setNivelSocioeconomico(apoderadoEntity.getNivelSocioeconomico());
 				apoderadoDTO.setTipoPoblacion(apoderadoEntity.getTipoPoblacion());
 				apoderadoDTO.setHabilitado(apoderadoEntity.getHabilitado());
+				apoderadoDTO.setRoles(rolesString);
 				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
 				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
 				apoderadoDTOs.add(apoderadoDTO);
@@ -76,48 +98,131 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 	}
 
 	@Override
-	public MessageDTO addApoderado(ApoderadoDTO apoderadoDTO) {
+	public MessageDTO addApoderado(ApoderadoDTO apoderadoDTO) throws SQLException {
 
-		if (apoderadoRepository.findById(apoderadoDTO.getDni()).isEmpty()) {
+		setUsuario(apoderadoDTO);
 
-			setUsuario(apoderadoDTO);
+		var apoderadoEntity = new ApoderadoEntity();
 
-			var apoderadoEntity = new ApoderadoEntity();
-			apoderadoEntity.setDni(apoderadoDTO.getDni());
-			apoderadoEntity.setNombres(apoderadoDTO.getNombres());
-			apoderadoEntity.setApellidos(apoderadoDTO.getApellidos());
-			apoderadoEntity.setFechaNacimiento(Util.unixTimeToDate(apoderadoDTO.getFechaNacimiento()));
-			apoderadoEntity.setCelular(apoderadoDTO.getCelular());
-			apoderadoEntity.setCorreo(apoderadoDTO.getCorreo());
-			apoderadoEntity.setSexo(apoderadoDTO.getSexo());
-			apoderadoEntity.setEstadoCivil(apoderadoDTO.getEstadoCivil());
-			apoderadoEntity.setNivelEducacion(apoderadoDTO.getNivelEducacion());
-			apoderadoEntity.setTipoTrabajo(apoderadoDTO.getTipoTrabajo());
-			apoderadoEntity.setNivelSocioeconomico(apoderadoDTO.getNivelSocioeconomico());
-			apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
-			apoderadoEntity.setHabilitado(apoderadoDTO.getHabilitado());
-			apoderadoEntity.setBaja(apoderadoDTO.getBaja());
+		apoderadoEntity.setDni(apoderadoDTO.getDni());
+		apoderadoEntity.setNombres(apoderadoDTO.getNombres());
+		apoderadoEntity.setApellidos(apoderadoDTO.getApellidos());
+		apoderadoEntity.setFechaNacimiento(Util.unixTimeToDate(apoderadoDTO.getFechaNacimiento()));
+		apoderadoEntity.setCelular(apoderadoDTO.getCelular());
+		apoderadoEntity.setCorreo(apoderadoDTO.getCorreo());
+		apoderadoEntity.setSexo(apoderadoDTO.getSexo());
+		apoderadoEntity.setEstadoCivil(apoderadoDTO.getEstadoCivil());
+		apoderadoEntity.setNivelEducacion(apoderadoDTO.getNivelEducacion());
+		apoderadoEntity.setTipoTrabajo(apoderadoDTO.getTipoTrabajo());
+		apoderadoEntity.setNivelSocioeconomico(apoderadoDTO.getNivelSocioeconomico());
+		apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
+		apoderadoEntity.setHabilitado(apoderadoDTO.getHabilitado());
+		apoderadoEntity.setBaja(apoderadoDTO.getBaja());
 
-			apoderadoRepository.save(apoderadoEntity);
+		apoderadoRepository.save(apoderadoEntity);
 
-			var messageDTO = new MessageDTO();
-			messageDTO.setOk(true);
-			messageDTO.setMensaje("agregado corectamente");
+		var messageDTO = new MessageDTO();
+		messageDTO.setOk(true);
+		messageDTO.setMensaje("agregado corectamente");
 
-			return messageDTO;
-
-		} else {
-
-			var messageDTO = new MessageDTO();
-			messageDTO.setOk(false);
-			messageDTO.setMensaje("usuario duplicado");
-			return messageDTO;
-
-		}
+		return messageDTO;
 
 	}
 
-	private void setUsuario(ApoderadoDTO apoderadoDTO) {
+	@Override
+	public List<ApoderadoDTO> listMedicos() {
+
+		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findAll();
+
+		List<Usuario> rolMedicoEntities = usuarioService.findByRol(RolNombre.ROLE_MEDICO);
+
+		List<ApoderadoEntity> medicosEntities = new ArrayList<>();
+
+		for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
+
+			for (Usuario usuario : rolMedicoEntities) {
+				if (apoderadoEntity.getDni().equals(usuario.getDni())) {
+					medicosEntities.add(apoderadoEntity);
+				}
+			}
+
+		}
+
+		List<ApoderadoDTO> apoderadoDTOs = new ArrayList<>();
+
+		if (!medicosEntities.isEmpty()) {
+
+			for (ApoderadoEntity apoderadoEntity : medicosEntities) {
+
+				List<String> rolesString = validateRoles(apoderadoEntity);
+
+				var apoderadoDTO = new ApoderadoDTO();
+				apoderadoDTO.setDni(apoderadoEntity.getDni());
+				apoderadoDTO.setNombres(apoderadoEntity.getNombres());
+				apoderadoDTO.setApellidos(apoderadoEntity.getApellidos());
+				apoderadoDTO.setFechaNacimiento(Util.dateToUnixTime(apoderadoEntity.getFechaNacimiento()));
+				apoderadoDTO.setCelular(apoderadoEntity.getCelular());
+				apoderadoDTO.setCorreo(apoderadoEntity.getCorreo());
+				apoderadoDTO.setSexo(apoderadoEntity.getSexo());
+				apoderadoDTO.setEstadoCivil(apoderadoEntity.getEstadoCivil());
+				apoderadoDTO.setNivelEducacion(apoderadoEntity.getNivelEducacion());
+				apoderadoDTO.setTipoTrabajo(apoderadoEntity.getTipoTrabajo());
+				apoderadoDTO.setNivelSocioeconomico(apoderadoEntity.getNivelSocioeconomico());
+				apoderadoDTO.setTipoPoblacion(apoderadoEntity.getTipoPoblacion());
+				apoderadoDTO.setHabilitado(apoderadoEntity.getHabilitado());
+				apoderadoDTO.setRoles(rolesString);
+				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
+				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
+				apoderadoDTOs.add(apoderadoDTO);
+			}
+
+		}
+
+		return apoderadoDTOs;
+	}
+
+	private List<String> validateRoles(ApoderadoEntity apoderadoEntity) {
+		List<String> rolesString = new ArrayList<>();
+
+		Optional<Usuario> apoderadoValidate = usuarioService.getByDni(apoderadoEntity.getDni());
+
+		if (apoderadoValidate.isPresent()) {
+			Set<Rol> roles = apoderadoValidate.get().getRoles();
+			rolesString = setRoles(roles);
+		}
+		return rolesString;
+	}
+
+	private List<String> setRoles(Set<Rol> roles) {
+		List<String> rolesString = new ArrayList<>();
+
+		for (Rol rol : roles) {
+
+			String rolNombre = "";
+
+			switch (rol.getRolNombre()) {
+			case ROLE_ADMIN:
+				rolNombre = "admin";
+				break;
+			case ROLE_MEDICO:
+				rolNombre = "medico";
+				break;
+			case ROLE_HIJO:
+				rolNombre = "hijo";
+				break;
+			case ROLE_USER:
+				rolNombre = "user";
+				break;
+			}
+			rolesString.add(rolNombre);
+		}
+		return rolesString;
+	}
+
+	private void setUsuario(ApoderadoDTO apoderadoDTO) throws SQLException {
+
+		Optional<Usuario> usuarioValidate = usuarioService.getByDni(apoderadoDTO.getDni());
+
 		Set<Rol> roles = new HashSet<>();
 
 		Usuario usuario = new Usuario(apoderadoDTO.getNombres().concat(" ").concat(apoderadoDTO.getApellidos()),
@@ -146,89 +251,14 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 			}
 		}
 
+		if (usuarioValidate.isPresent()) {
+//			rolJdbcRepository.deleteRolByUsuario(usuarioValidate.get().getId());
+			usuario.setId(usuarioValidate.get().getId());
+		}
+
 		usuario.setRoles(roles);
 
 		usuarioService.save(usuario);
-	}
-
-	@Override
-	public List<ApoderadoDTO> listMedicos() {
-
-		List<ApoderadoEntity> apoderadoEntities = apoderadoRepository.findAll();
-
-		List<Usuario> rolMedicoEntities = usuarioService.findByRol(RolNombre.ROLE_MEDICO);
-
-		List<ApoderadoEntity> medicosEntities = new ArrayList<>();
-
-		for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
-
-			for (Usuario usuario : rolMedicoEntities) {
-				if (apoderadoEntity.getDni().equals(usuario.getDni())) {
-					medicosEntities.add(apoderadoEntity);
-				}
-			}
-
-		}
-
-		List<ApoderadoDTO> apoderadoDTOs = new ArrayList<>();
-
-		if (!medicosEntities.isEmpty()) {
-
-			for (ApoderadoEntity apoderadoEntity : apoderadoEntities) {
-
-				Set<Rol> roles = usuarioService.getByDni(apoderadoEntity.getDni()).get().getRoles();
-
-				List<String> rolesString = setRoles(roles);
-
-				var apoderadoDTO = new ApoderadoDTO();
-				apoderadoDTO.setDni(apoderadoEntity.getDni());
-				apoderadoDTO.setNombres(apoderadoEntity.getNombres());
-				apoderadoDTO.setApellidos(apoderadoEntity.getApellidos());
-				apoderadoDTO.setFechaNacimiento(Util.dateToUnixTime(apoderadoEntity.getFechaNacimiento()));
-				apoderadoDTO.setCelular(apoderadoEntity.getCelular());
-				apoderadoDTO.setCorreo(apoderadoEntity.getCorreo());
-				apoderadoDTO.setSexo(apoderadoEntity.getSexo());
-				apoderadoDTO.setEstadoCivil(apoderadoEntity.getEstadoCivil());
-				apoderadoDTO.setNivelEducacion(apoderadoEntity.getNivelEducacion());
-				apoderadoDTO.setTipoTrabajo(apoderadoEntity.getTipoTrabajo());
-				apoderadoDTO.setNivelSocioeconomico(apoderadoEntity.getNivelSocioeconomico());
-				apoderadoDTO.setTipoPoblacion(apoderadoEntity.getTipoPoblacion());
-				apoderadoDTO.setHabilitado(apoderadoEntity.getHabilitado());
-				apoderadoDTO.setRoles(rolesString);
-				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
-				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
-				apoderadoDTOs.add(apoderadoDTO);
-			}
-
-		}
-
-		return apoderadoDTOs;
-	}
-
-	private List<String> setRoles(Set<Rol> roles) {
-		List<String> rolesString = new ArrayList<>();
-
-		for (Rol rol : roles) {
-
-			String rolNombre = "";
-
-			switch (rol.getRolNombre()) {
-			case ROLE_ADMIN:
-				rolNombre = "admin";
-				break;
-			case ROLE_MEDICO:
-				rolNombre = "medico";
-				break;
-			case ROLE_HIJO:
-				rolNombre = "hijo";
-				break;
-			case ROLE_USER:
-				rolNombre = "user";
-				break;
-			}
-			rolesString.add(rolNombre);
-		}
-		return rolesString;
 	}
 
 }

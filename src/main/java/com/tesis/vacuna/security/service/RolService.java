@@ -8,6 +8,7 @@ import com.tesis.vacuna.security.entity.Rol;
 import com.tesis.vacuna.security.enums.RolNombre;
 import com.tesis.vacuna.security.repository.RolRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +24,9 @@ public class RolService {
 
 	public void save(Rol rol) {
 		rolRepository.save(rol);
+	}
+
+	public List<Rol> findAll() {
+		return rolRepository.findAll();
 	}
 }

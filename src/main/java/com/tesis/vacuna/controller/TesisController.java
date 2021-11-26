@@ -1,5 +1,6 @@
 package com.tesis.vacuna.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tesis.vacuna.dto.ApoderadoDTO;
+import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
-import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.entity.EstadoCivilEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.entity.NivelEducacionEntity;
 import com.tesis.vacuna.entity.NivelSocioEconomicoEntity;
 import com.tesis.vacuna.entity.TipoPoblacionEntity;
 import com.tesis.vacuna.entity.TipoTrabajoEntity;
+import com.tesis.vacuna.entity.UbicacionCentrosEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
-import com.tesis.vacuna.security.entity.Usuario;
-import com.tesis.vacuna.security.enums.RolNombre;
+import com.tesis.vacuna.security.entity.Rol;
+import com.tesis.vacuna.security.service.RolService;
 import com.tesis.vacuna.security.service.UsuarioService;
 import com.tesis.vacuna.service.ApoderadoHijoService;
 import com.tesis.vacuna.service.ApoderadoService;
@@ -36,13 +38,13 @@ import com.tesis.vacuna.service.NivelEducacionService;
 import com.tesis.vacuna.service.NivelSocioEconomicoService;
 import com.tesis.vacuna.service.TipoPoblacionService;
 import com.tesis.vacuna.service.TipoTrabajoService;
+import com.tesis.vacuna.service.UbicacionCentrosService;
 import com.tesis.vacuna.service.VacunaService;
 import com.tesis.vacuna.service.VacunacionService;
 
 @RestController
 @RequestMapping("/vacunas")
 @CrossOrigin(origins = "*")
-@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO')")
 public class TesisController {
 
 	@Autowired
@@ -74,30 +76,35 @@ public class TesisController {
 
 	@Autowired
 	ApoderadoHijoService apoderadoHijoService;
-	
+
+	@Autowired
+	RolService rolService;
+
 	@Autowired
 	UsuarioService usuarioService;
 
-	// APODERADO
-	
-	/*
-	@GetMapping("/apoderados")
-	public List<ApoderadoDTO> getApoderados() {
-		List<ApoderadoDTO> apoderados = apoderadoService.listApoderados();
-		return apoderados;
-	}
-	*/
+	@Autowired
+	UbicacionCentrosService ubicacionCentrosService;
 
+	// APODERADO
+
+	/*
+	 * @GetMapping("/apoderados") public List<ApoderadoDTO> getApoderados() {
+	 * List<ApoderadoDTO> apoderados = apoderadoService.listApoderados(); return
+	 * apoderados; }
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
 	@GetMapping("/apoderados/{habilitado}")
 	public List<ApoderadoDTO> getApoderados(@PathVariable Boolean habilitado) {
 		return apoderadoService.findByHabilitado(habilitado);
 	}
 
+	
 	@PostMapping("/apoderado")
-	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) {
+	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) throws SQLException {
 		return apoderadoService.addApoderado(apoderado);
 	}
-	
+
 	@GetMapping("/medicos")
 	public List<ApoderadoDTO> getMedicos() {
 		return apoderadoService.listMedicos();
@@ -152,31 +159,44 @@ public class TesisController {
 		return vacunacionService.save(vacunacionDTO);
 	}
 
+	// ROLES
+	@GetMapping("/roles")
+	public List<Rol> getRoles() {
+		return rolService.findAll();
+	}
+
+	// UBICACIONES
+	@GetMapping("/ubicaciones")
+	public List<UbicacionCentrosEntity> getUbicaciones() {
+		return ubicacionCentrosService.findAll();
+	}
+
 	// COMBOS
 
-	@GetMapping("/estadosCivil")
-	public List<EstadoCivilEntity> getEstadosCivil() {
-		return estadoCivilService.findAll();
-	}
-
-	@GetMapping("/nivelesEducacion")
-	public List<NivelEducacionEntity> getNivelesEducacion() {
-		return nivelEducacionService.findAll();
-	}
-
-	@GetMapping("/nivelesSocioeconomico")
-	public List<NivelSocioEconomicoEntity> getNivelesSocioeconomico() {
-		return nivelSocioEconomicoService.findAll();
-	}
-
-	@GetMapping("/tiposPoblacion")
-	public List<TipoPoblacionEntity> getTiposPoblacion() {
-		return tipoPoblacionService.findAll();
-	}
-
-	@GetMapping("/tiposTrabajo")
-	public List<TipoTrabajoEntity> getTiposTrabajo() {
-		return tipoTrabajoService.findAll();
-	}
+//	@GetMapping("/estadosCivil")
+//	public List<EstadoCivilEntity> getEstadosCivil() {
+//		return estadoCivilService.findAll();
+//	}
+//
+//	@GetMapping("/nivelesEducacion")
+//	public List<NivelEducacionEntity> getNivelesEducacion() {
+//		return nivelEducacionService.findAll();
+//	}
+//
+//	@GetMapping("/nivelesSocioeconomico")
+//	public List<NivelSocioEconomicoEntity> getNivelesSocioeconomico() {
+//		return nivelSocioEconomicoService.findAll();
+//	}
+//
+//	@GetMapping("/tiposPoblacion")
+//	public List<TipoPoblacionEntity> getTiposPoblacion() {
+//		return tipoPoblacionService.findAll();
+//	}
+//
+//	@GetMapping("/tiposTrabajo")
+//
+//	public List<TipoTrabajoEntity> getTiposTrabajo() {
+//		return tipoTrabajoService.findAll();
+//	}
 
 }

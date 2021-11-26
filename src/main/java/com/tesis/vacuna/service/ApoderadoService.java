@@ -1,5 +1,6 @@
 package com.tesis.vacuna.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.tesis.vacuna.dto.ApoderadoDTO;
@@ -11,5 +12,5 @@ public interface ApoderadoService {
 
 	List<ApoderadoDTO> findByHabilitado(Boolean habilitado);
 
-	MessageDTO addApoderado(ApoderadoDTO apoderadoDTO);
+	MessageDTO addApoderado(ApoderadoDTO apoderadoDTO) throws SQLException;
 }
