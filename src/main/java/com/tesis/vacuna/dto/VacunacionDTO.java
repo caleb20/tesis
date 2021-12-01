@@ -10,6 +10,7 @@ public class VacunacionDTO {
 	private String dni;
 	private String nombres;
 	private String apellidos;
+	private String fechaNacimiento;
 	private String vacuna;
 	private String fechaCita;
 	private String fechaVacunacion;
@@ -65,6 +66,14 @@ public class VacunacionDTO {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public String getVacuna() {

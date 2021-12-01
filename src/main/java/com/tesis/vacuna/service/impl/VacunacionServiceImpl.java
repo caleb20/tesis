@@ -169,4 +169,44 @@ public class VacunacionServiceImpl implements VacunacionService {
 		return messageDTO;
 	}
 
+	@Override
+	public List<VacunacionDTO> findByFechaCitaBetweenAndIdVacunaAndEstado(String fechaIni, String fechaFin,
+			Integer idVacuna, String estado) {
+
+		List<VacunacionEntity> vacunacionesEntities = vacunacionRepository.findByFechaCitaBetweenAndIdVacunaAndEstado(
+				Util.unixTimeToDate(fechaIni), Util.unixTimeToDate(fechaFin), idVacuna, estado);
+
+		List<VacunacionDTO> vacunacionDTOs = setVacunasDTO(vacunacionesEntities);
+
+		return vacunacionDTOs;
+	}
+
+	@Override
+	public List<VacunacionDTO> findByFechaCitaBetweenAndEstado(String fechaIni, String fechaFin, String estado) {
+		List<VacunacionEntity> vacunacionesEntities = vacunacionRepository
+				.findByFechaCitaBetweenAndEstado(Util.unixTimeToDate(fechaIni), Util.unixTimeToDate(fechaFin), estado);
+
+		List<VacunacionDTO> vacunacionDTOs = setVacunasDTO(vacunacionesEntities);
+
+		return vacunacionDTOs;
+	}
+
+	private List<VacunacionDTO> setVacunasDTO(List<VacunacionEntity> vacunacionesEntities) {
+		List<VacunacionDTO> vacunacionDTOs = new ArrayList<>();
+
+		for (VacunacionEntity vacunacionEntity : vacunacionesEntities) {
+			VacunacionDTO vacunacionDTO = new VacunacionDTO();
+			vacunacionDTO.setIdVacuna(vacunacionEntity.getIdVacuna());
+			vacunacionDTO.setVacuna(vacunaService.findById(vacunacionEntity.getIdVacuna()).getNombreVacuna());
+			vacunacionDTO.setFechaCita(Util.dateToUnixTime(vacunacionEntity.getFechaCita()));
+			vacunacionDTO.setDni(vacunacionEntity.getDniHijo());
+			vacunacionDTO.setNombres(hijoService.findById(vacunacionEntity.getDniHijo()).getNombres());
+			vacunacionDTO.setApellidos(hijoService.findById(vacunacionEntity.getDniHijo()).getApellidos());
+			vacunacionDTO.setFechaNacimiento(
+					Util.dateToUnixTime(hijoService.findById(vacunacionEntity.getDniHijo()).getFechaNacimiento()));
+			vacunacionDTOs.add(vacunacionDTO);
+		}
+		return vacunacionDTOs;
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.tesis.vacuna.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,19 +100,19 @@ public class TesisController {
 		return apoderadoService.findByHabilitado(habilitado);
 	}
 
-	
 	@PostMapping("/apoderado")
 	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) throws SQLException {
 		return apoderadoService.addApoderado(apoderado);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
 	@GetMapping("/medicos")
 	public List<ApoderadoDTO> getMedicos() {
 		return apoderadoService.listMedicos();
 	}
 
 	// HIJO
-
+	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
 	@GetMapping("/hijos")
 	public List<HijoEntity> getHijos() {
 		List<HijoEntity> hijos = hijoService.findAll();
@@ -133,9 +134,7 @@ public class TesisController {
 
 	@GetMapping("/vacunas")
 	public List<VacunaEntity> getVacunas() {
-		List<VacunaEntity> vacunas = vacunaService.findAll();
-
-		return vacunas;
+		return vacunaService.findAll();
 	}
 
 	// VACUNACION
@@ -155,8 +154,21 @@ public class TesisController {
 
 	@PostMapping("/vacunacion")
 	public MessageDTO addVacunacion(@RequestBody VacunacionDTO vacunacionDTO) {
-
 		return vacunacionService.save(vacunacionDTO);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
+	@GetMapping("/vacunacion/{fechaIni}/{fechaFin}/{idVacuna}")
+	public List<VacunacionDTO> getVacunacionByFechaTipoVacuna(@PathVariable String fechaIni,
+			@PathVariable String fechaFin, @PathVariable Integer idVacuna) {
+
+		if (idVacuna.equals(0)) {
+			return vacunacionService.findByFechaCitaBetweenAndEstado(fechaIni, fechaFin, "2");
+		} else {
+			return vacunacionService.findByFechaCitaBetweenAndIdVacunaAndEstado(fechaIni, fechaFin, idVacuna, "2");
+
+		}
+
 	}
 
 	// ROLES
@@ -170,33 +182,5 @@ public class TesisController {
 	public List<UbicacionCentrosEntity> getUbicaciones() {
 		return ubicacionCentrosService.findAll();
 	}
-
-	// COMBOS
-
-//	@GetMapping("/estadosCivil")
-//	public List<EstadoCivilEntity> getEstadosCivil() {
-//		return estadoCivilService.findAll();
-//	}
-//
-//	@GetMapping("/nivelesEducacion")
-//	public List<NivelEducacionEntity> getNivelesEducacion() {
-//		return nivelEducacionService.findAll();
-//	}
-//
-//	@GetMapping("/nivelesSocioeconomico")
-//	public List<NivelSocioEconomicoEntity> getNivelesSocioeconomico() {
-//		return nivelSocioEconomicoService.findAll();
-//	}
-//
-//	@GetMapping("/tiposPoblacion")
-//	public List<TipoPoblacionEntity> getTiposPoblacion() {
-//		return tipoPoblacionService.findAll();
-//	}
-//
-//	@GetMapping("/tiposTrabajo")
-//
-//	public List<TipoTrabajoEntity> getTiposTrabajo() {
-//		return tipoTrabajoService.findAll();
-//	}
 
 }
