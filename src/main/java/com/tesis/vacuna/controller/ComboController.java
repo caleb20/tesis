@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tesis.vacuna.entity.EstadoCivilEntity;
 import com.tesis.vacuna.entity.NivelEducacionEntity;
+import com.tesis.vacuna.entity.NivelRiesgoEntity;
 import com.tesis.vacuna.entity.NivelSocioEconomicoEntity;
 import com.tesis.vacuna.entity.TipoPoblacionEntity;
 import com.tesis.vacuna.entity.TipoTrabajoEntity;
@@ -17,6 +18,7 @@ import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.service.EstadoCivilService;
 import com.tesis.vacuna.service.HijoService;
 import com.tesis.vacuna.service.NivelEducacionService;
+import com.tesis.vacuna.service.NivelRiesgoService;
 import com.tesis.vacuna.service.NivelSocioEconomicoService;
 import com.tesis.vacuna.service.TipoPoblacionService;
 import com.tesis.vacuna.service.TipoTrabajoService;
@@ -47,6 +49,9 @@ public class ComboController {
 	@Autowired
 	TipoTrabajoService tipoTrabajoService;
 
+	@Autowired
+	NivelRiesgoService nivelRiesgoService;
+	
 	// COMBOS
 
 	@GetMapping("/estadosCivil")
@@ -70,9 +75,13 @@ public class ComboController {
 	}
 
 	@GetMapping("/tiposTrabajo")
-
 	public List<TipoTrabajoEntity> getTiposTrabajo() {
 		return tipoTrabajoService.findAll();
 	}
 
+	@GetMapping("/nivelesRiesgo")
+	public List<NivelRiesgoEntity> getNivelesRiesgo() {
+		return nivelRiesgoService.findAll();
+	}
+	
 }

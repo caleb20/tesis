@@ -1,7 +1,6 @@
 package com.tesis.vacuna.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,7 @@ import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
-import com.tesis.vacuna.entity.EstadoCivilEntity;
 import com.tesis.vacuna.entity.HijoEntity;
-import com.tesis.vacuna.entity.NivelEducacionEntity;
-import com.tesis.vacuna.entity.NivelSocioEconomicoEntity;
-import com.tesis.vacuna.entity.TipoPoblacionEntity;
-import com.tesis.vacuna.entity.TipoTrabajoEntity;
 import com.tesis.vacuna.entity.UbicacionCentrosEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
@@ -45,7 +39,7 @@ import com.tesis.vacuna.service.VacunacionService;
 
 @RestController
 @RequestMapping("/vacunas")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class TesisController {
 
 	@Autowired
@@ -100,7 +94,7 @@ public class TesisController {
 		return apoderadoService.findByHabilitado(habilitado);
 	}
 
-	@PostMapping("/apoderado")
+	@PostMapping("/apoderado/nuevo")
 	public MessageDTO addApoderado(@RequestBody ApoderadoDTO apoderado) throws SQLException {
 		return apoderadoService.addApoderado(apoderado);
 	}
