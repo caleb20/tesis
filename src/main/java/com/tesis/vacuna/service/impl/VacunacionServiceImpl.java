@@ -144,8 +144,12 @@ public class VacunacionServiceImpl implements VacunacionService {
 
 		vacunacionEntity.setLote(vacunacionDTO.getLote());
 		vacunacionEntity.setDniHijo(vacunacionDTO.getDni());
-		vacunacionEntity.setIdVacuna(Integer.valueOf(vacunacionDTO.getVacuna()));
-		vacunacionEntity.setFechaCita(vacunacionEntity.getFechaCita());
+		vacunacionEntity.setIdVacuna(Integer.valueOf(vacunacionDTO.getIdVacuna()));
+		if (vacunacionDTO.getIdVacuna().equals(1)) {
+			vacunacionEntity.setFechaCita(new Date());
+		} else {
+			vacunacionEntity.setFechaCita(vacunacionEntity.getFechaCita());
+		}
 		vacunacionEntity.setFecha(new Date());
 		vacunacionEntity.setLugar(vacunacionDTO.getLugar());
 		vacunacionEntity.setDniVacunador(vacunacionDTO.getDniVacunador());
@@ -160,7 +164,7 @@ public class VacunacionServiceImpl implements VacunacionService {
 
 		VacunacionEntity vacunacionEntitySiguiente = new VacunacionEntity();
 		vacunacionEntitySiguiente.setDniHijo(vacunacionDTO.getDni());
-		vacunacionEntitySiguiente.setIdVacuna(Integer.valueOf(vacunacionDTO.getVacuna()) + 1);
+		vacunacionEntitySiguiente.setIdVacuna(Integer.valueOf(vacunacionDTO.getIdVacuna()) + 1);
 		vacunacionEntitySiguiente.setFechaCita(Util.unixTimeToDate(vacunacionDTO.getFechaCita()));
 		vacunacionEntitySiguiente.setEstado("2");
 

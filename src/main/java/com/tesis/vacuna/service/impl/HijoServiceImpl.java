@@ -57,6 +57,7 @@ public class HijoServiceImpl implements HijoService {
 			hijoEntity.setNombres(hijoDTO.getNombres());
 			hijoEntity.setApellidos(hijoDTO.getApellidos());
 			hijoEntity.setFechaNacimiento(Util.unixTimeToDate(hijoDTO.getFechaNacimiento()));
+			hijoEntity.setSexo(hijoDTO.getSexo());
 
 			hijoRepository.save(hijoEntity);
 

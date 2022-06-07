@@ -89,6 +89,7 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 				apoderadoDTO.setRoles(rolesString);
 				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
 				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
+				apoderadoDTO.setNivelRiesgo(apoderadoEntity.getNivelRiesgo());
 				apoderadoDTOs.add(apoderadoDTO);
 			}
 
@@ -118,6 +119,7 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 		apoderadoEntity.setTipoPoblacion(apoderadoDTO.getTipoPoblacion());
 		apoderadoEntity.setHabilitado(apoderadoDTO.getHabilitado());
 		apoderadoEntity.setBaja(apoderadoDTO.getBaja());
+		apoderadoEntity.setNivelRiesgo(apoderadoDTO.getNivelRiesgo());
 
 		apoderadoRepository.save(apoderadoEntity);
 
@@ -173,6 +175,7 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 				apoderadoDTO.setRoles(rolesString);
 				apoderadoDTO.setBaja(apoderadoEntity.getBaja());
 				apoderadoDTO.setNumeroHijos(apoderadoHijoService.findByDniApoderado(apoderadoEntity.getDni()).size());
+				apoderadoDTO.setNivelRiesgo(apoderadoEntity.getNivelRiesgo());
 				apoderadoDTOs.add(apoderadoDTO);
 			}
 

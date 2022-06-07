@@ -18,6 +18,7 @@ import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
+import com.tesis.vacuna.entity.FrecuenciaEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.entity.UbicacionCentrosEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
@@ -28,7 +29,9 @@ import com.tesis.vacuna.security.service.UsuarioService;
 import com.tesis.vacuna.service.ApoderadoHijoService;
 import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.service.EstadoCivilService;
+import com.tesis.vacuna.service.FrecuenciaService;
 import com.tesis.vacuna.service.HijoService;
+import com.tesis.vacuna.service.MensajeriaService;
 import com.tesis.vacuna.service.NivelEducacionService;
 import com.tesis.vacuna.service.NivelSocioEconomicoService;
 import com.tesis.vacuna.service.TipoPoblacionService;
@@ -80,6 +83,12 @@ public class TesisController {
 
 	@Autowired
 	UbicacionCentrosService ubicacionCentrosService;
+
+	@Autowired
+	FrecuenciaService frecuenciaService;
+
+	@Autowired
+	MensajeriaService mensajeriaService;
 
 	// APODERADO
 
@@ -177,4 +186,20 @@ public class TesisController {
 		return ubicacionCentrosService.findAll();
 	}
 
+	// FRECUENCIAS
+	@GetMapping("/frecuencias")
+	public List<FrecuenciaEntity> getFrecuencias() {
+		return frecuenciaService.findAll();
+	}
+
+	@PostMapping("/frecuencia")
+	public FrecuenciaEntity addFrecuencia(@RequestBody FrecuenciaEntity frecuenciaEntity) {
+		return frecuenciaService.addFrecuencia(frecuenciaEntity);
+	}
+
+	// MENSAJERIAS
+	@GetMapping("/mensajerias")
+	public void getMesajeria() {
+		mensajeriaService.listadoPendientes();
+	}
 }

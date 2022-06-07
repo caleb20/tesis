@@ -17,23 +17,14 @@ public class VacunacionEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-
 	private String lote;
-
 	private String dniHijo;
-
 	private int idVacuna;
-
 	private Date fechaCita;
-
 	private Date fecha;
-
 	private String lugar;
-
 	private String dniVacunador;
-
 	private String reaccion;
-
 	private String estado;
 
 	public Integer getId() {

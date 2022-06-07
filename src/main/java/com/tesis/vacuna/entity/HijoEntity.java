@@ -19,6 +19,8 @@ public class HijoEntity {
 
 	private Date fechaNacimiento;
 
+	private String sexo;
+
 	public String getDni() {
 		return dni;
 	}
@@ -49,6 +51,14 @@ public class HijoEntity {
 
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
 	}
 
 }

@@ -7,6 +7,7 @@ public class HijoDTO {
 	private String apellidos;
 	private String fechaNacimiento;
 	private String dniPadre;
+	private String sexo;
 
 	public String getDni() {
 		return dni;
@@ -46,6 +47,14 @@ public class HijoDTO {
 
 	public void setDniPadre(String dniPadre) {
 		this.dniPadre = dniPadre;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
 	}
 
 }

@@ -1,6 +1,11 @@
 package com.tesis.vacuna.security.controller;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tesis.vacuna.dto.Mensaje;
 import com.tesis.vacuna.security.dto.JwtDto;
@@ -23,11 +32,6 @@ import com.tesis.vacuna.security.enums.RolNombre;
 import com.tesis.vacuna.security.jwt.JwtProvider;
 import com.tesis.vacuna.security.service.RolService;
 import com.tesis.vacuna.security.service.UsuarioService;
-
-import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")

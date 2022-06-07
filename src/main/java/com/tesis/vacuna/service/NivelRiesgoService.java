@@ -8,4 +8,6 @@ public interface NivelRiesgoService {
 
 	List<NivelRiesgoEntity> findAll();
 
+	NivelRiesgoEntity findById(String id);
+
 }

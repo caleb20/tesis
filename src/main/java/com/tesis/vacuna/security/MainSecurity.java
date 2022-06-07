@@ -57,7 +57,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/auth/**","/combos/**", "/vacunas/apoderado/**").permitAll().anyRequest()
+		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/auth/**","/combos/**", "/vacunas/apoderado/**", "/vacunas/mensajerias/**").permitAll().anyRequest()
 				.authenticated().and().exceptionHandling().authenticationEntryPoint(jwtEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

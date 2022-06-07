@@ -5,15 +5,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "nivelRiesgo")
-public class NivelRiesgoEntity {
+@Table(name = "frecuencia")
+public class FrecuenciaEntity {
 
 	@Id
 	private String valor;
-
 	private String descripcion;
-
-	private String frecuencia;
+	private String mensaje;
+	private Integer intervalo;
 
 	public String getValor() {
 		return valor;
@@ -31,12 +30,19 @@ public class NivelRiesgoEntity {
 		this.descripcion = descripcion;
 	}
 
-	public String getFrecuencia() {
-		return frecuencia;
+	public String getMensaje() {
+		return mensaje;
 	}
 
-	public void setFrecuencia(String frecuencia) {
-		this.frecuencia = frecuencia;
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 
+	public Integer getIntervalo() {
+		return intervalo;
+	}
+
+	public void setIntervalo(Integer intervalo) {
+		this.intervalo = intervalo;
+	}
 }

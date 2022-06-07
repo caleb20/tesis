@@ -25,6 +25,7 @@ public class ApoderadoEntity {
 	private String tipoPoblacion;
 	private Boolean habilitado;
 	private Boolean baja;
+	private String nivelRiesgo;
 
 	public String getDni() {
 		return dni;
@@ -136,6 +137,14 @@ public class ApoderadoEntity {
 
 	public void setBaja(Boolean baja) {
 		this.baja = baja;
+	}
+
+	public String getNivelRiesgo() {
+		return nivelRiesgo;
+	}
+
+	public void setNivelRiesgo(String nivelRiesgo) {
+		this.nivelRiesgo = nivelRiesgo;
 	}
 
 }

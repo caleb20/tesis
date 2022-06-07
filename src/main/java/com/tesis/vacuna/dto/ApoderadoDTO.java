@@ -20,6 +20,7 @@ public class ApoderadoDTO {
 	private List<String> roles;
 	private Boolean habilitado;
 	private Boolean baja;
+	private String nivelRiesgo;
 
 	public String getDni() {
 		return dni;
@@ -147,6 +148,14 @@ public class ApoderadoDTO {
 
 	public void setBaja(Boolean baja) {
 		this.baja = baja;
+	}
+
+	public String getNivelRiesgo() {
+		return nivelRiesgo;
+	}
+
+	public void setNivelRiesgo(String nivelRiesgo) {
+		this.nivelRiesgo = nivelRiesgo;
 	}
 
 }

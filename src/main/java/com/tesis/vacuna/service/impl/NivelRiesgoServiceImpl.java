@@ -21,4 +21,10 @@ public class NivelRiesgoServiceImpl implements NivelRiesgoService {
 		return nivelRiesgoRepository.findAll();
 	}
 
+	@Override
+	public NivelRiesgoEntity findById(String id) {
+
+		return nivelRiesgoRepository.findById(id).get();
+	}
+
 }

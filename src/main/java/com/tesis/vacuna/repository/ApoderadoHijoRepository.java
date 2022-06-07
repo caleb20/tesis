@@ -10,4 +10,6 @@ public interface ApoderadoHijoRepository extends JpaRepository<ApoderadoHijoEnti
 
 	List<ApoderadoHijoEntity> findByDniApoderado(String dniApoderado);
 
+	List<ApoderadoHijoEntity> findByDniHijo(String dniHijo);
+
 }
