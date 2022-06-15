@@ -1,5 +1,6 @@
 package com.tesis.vacuna.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.tesis.vacuna.dto.ApoderadoDTO;
+import com.tesis.vacuna.dto.ApoderadoHijoDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
+import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.entity.ApoderadoHijoEntity;
 import com.tesis.vacuna.entity.HijoEntity;
 import com.tesis.vacuna.repository.ApoderadoHijoRepository;
@@ -20,7 +24,10 @@ import com.tesis.vacuna.security.entity.Usuario;
 import com.tesis.vacuna.security.enums.RolNombre;
 import com.tesis.vacuna.security.service.RolService;
 import com.tesis.vacuna.security.service.UsuarioService;
+import com.tesis.vacuna.service.ApoderadoHijoService;
+import com.tesis.vacuna.service.ApoderadoService;
 import com.tesis.vacuna.service.HijoService;
+import com.tesis.vacuna.service.NivelRiesgoService;
 import com.tesis.vacuna.utils.Util;
 
 @Service
@@ -40,6 +47,12 @@ public class HijoServiceImpl implements HijoService {
 
 	@Autowired
 	RolService rolService;
+
+	@Autowired
+	ApoderadoHijoService apoderadoHijoService;
+
+	@Autowired
+	NivelRiesgoService nivelRiesgoService;
 
 	@Override
 	public List<HijoEntity> findAll() {
@@ -98,6 +111,41 @@ public class HijoServiceImpl implements HijoService {
 	public HijoEntity findById(String dniHijo) {
 
 		return hijoRepository.findById(dniHijo).get();
+	}
+
+	@Override
+	public List<ApoderadoEntity> findByHabilitado(Boolean habilitado) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<HijoDTO> findByNivelRiesgo(String nivelRiesgo) {
+
+		List<HijoDTO> hijoDTOs = new ArrayList<>();
+
+		List<HijoEntity> hijoEntities = hijoRepository.findAll();
+
+		for (HijoEntity hijoEntity : hijoEntities) {
+			HijoDTO hijoDTO = new HijoDTO();
+
+			ApoderadoDTO apoderadoDTO = apoderadoHijoService.findByDniHijo(hijoEntity.getDni()).get(0);
+
+			if (nivelRiesgo.equals(apoderadoDTO.getNivelRiesgo())) {
+
+				hijoDTO.setDni(hijoEntity.getDni());
+				hijoDTO.setNombres(hijoEntity.getNombres());
+				hijoDTO.setApellidos(hijoEntity.getApellidos());
+				hijoDTO.setFechaNacimiento(Util.dateToUnixTime(hijoEntity.getFechaNacimiento()));
+				hijoDTO.setSexo(hijoDTO.getSexo());
+				hijoDTO.setDniPadre(apoderadoDTO.getDni());
+				hijoDTO.setNivelRiesgo(nivelRiesgoService.findById(apoderadoDTO.getNivelRiesgo()).getDescripcion());
+
+				hijoDTOs.add(hijoDTO);
+			}
+		}
+
+		return hijoDTOs;
 	}
 
 }

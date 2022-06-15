@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tesis.vacuna.dto.ApoderadoDTO;
+import com.tesis.vacuna.dto.ApoderadoHijoDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.entity.ApoderadoHijoEntity;

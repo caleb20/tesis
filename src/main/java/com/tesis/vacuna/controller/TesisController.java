@@ -18,8 +18,10 @@ import com.tesis.vacuna.dto.EstadoVacunacionDTO;
 import com.tesis.vacuna.dto.HijoDTO;
 import com.tesis.vacuna.dto.MessageDTO;
 import com.tesis.vacuna.dto.VacunacionDTO;
+import com.tesis.vacuna.entity.ApoderadoEntity;
 import com.tesis.vacuna.entity.FrecuenciaEntity;
 import com.tesis.vacuna.entity.HijoEntity;
+import com.tesis.vacuna.entity.NivelRiesgoEntity;
 import com.tesis.vacuna.entity.UbicacionCentrosEntity;
 import com.tesis.vacuna.entity.VacunaEntity;
 import com.tesis.vacuna.entity.VacunacionEntity;
@@ -33,6 +35,7 @@ import com.tesis.vacuna.service.FrecuenciaService;
 import com.tesis.vacuna.service.HijoService;
 import com.tesis.vacuna.service.MensajeriaService;
 import com.tesis.vacuna.service.NivelEducacionService;
+import com.tesis.vacuna.service.NivelRiesgoService;
 import com.tesis.vacuna.service.NivelSocioEconomicoService;
 import com.tesis.vacuna.service.TipoPoblacionService;
 import com.tesis.vacuna.service.TipoTrabajoService;
@@ -90,6 +93,9 @@ public class TesisController {
 	@Autowired
 	MensajeriaService mensajeriaService;
 
+	@Autowired
+	NivelRiesgoService nivelRiesgoService;
+
 	// APODERADO
 
 	/*
@@ -114,12 +120,25 @@ public class TesisController {
 		return apoderadoService.listMedicos();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
+	@GetMapping("/apoderado/dni/{dni}")
+	public ApoderadoEntity getApoderadoPorDni(@PathVariable String dni) {
+		ApoderadoEntity apoderado = apoderadoService.findById(dni);
+		return apoderado;
+	}
+
 	// HIJO
 	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
 	@GetMapping("/hijos")
 	public List<HijoEntity> getHijos() {
 		List<HijoEntity> hijos = hijoService.findAll();
 		return hijos;
+	}
+
+	@GetMapping("/hijo/dni/{dni}")
+	public HijoEntity getHijoPorDni(@PathVariable String dni) {
+		HijoEntity hijo = hijoService.findById(dni);
+		return hijo;
 	}
 
 	@GetMapping("/hijo/{dniApoderado}")
@@ -131,6 +150,12 @@ public class TesisController {
 	@PostMapping("/hijo")
 	public MessageDTO addHijo(@RequestBody HijoDTO hijo) {
 		return hijoService.addHijo(hijo);
+	}
+
+	@GetMapping("/hijo/riesgo/{nivelRiesgo}")
+	public List<HijoDTO> getHijosPorNivelRiesgo(@PathVariable String nivelRiesgo) {
+		List<HijoDTO> hijos = hijoService.findByNivelRiesgo(nivelRiesgo);
+		return hijos;
 	}
 
 	// VACUNA
@@ -185,6 +210,14 @@ public class TesisController {
 	public List<UbicacionCentrosEntity> getUbicaciones() {
 		return ubicacionCentrosService.findAll();
 	}
+
+	// UBICACIONES
+	@GetMapping("/riesgos")
+	public List<NivelRiesgoEntity> getRiesgos() {
+		return nivelRiesgoService.findAll();
+	}
+
+	//
 
 	// FRECUENCIAS
 	@GetMapping("/frecuencias")

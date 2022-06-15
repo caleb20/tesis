@@ -264,4 +264,9 @@ public class ApoderadoServiceImpl implements ApoderadoService {
 		usuarioService.save(usuario);
 	}
 
+	@Override
+	public ApoderadoEntity findById(String dni) {
+		return apoderadoRepository.findById(dni).get();
+	}
+
 }
