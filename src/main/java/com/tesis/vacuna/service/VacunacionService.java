@@ -17,11 +17,17 @@ public interface VacunacionService {
 
 	VacunacionEntity findByDniHijoAndIdVacuna(String dniHijo, Integer idVacuna);
 
-	List<VacunacionDTO> findByFechaCitaBetweenAndIdVacunaAndEstado(String fechaIni, String fechaFin, Integer idVacuna,
-			String estado);
+//	List<VacunacionDTO> findByFechaCitaBetweenAndIdVacunaAndEstado(String fechaIni, String fechaFin, Integer idVacuna,
+//			String estado);
 
-	List<VacunacionDTO> findByFechaCitaBetweenAndEstado(String fechaIni, String fechaFin, String estado);
+//	List<VacunacionDTO> findByFechaCitaBetweenAndEstado(String fechaIni, String fechaFin, String estado);
 
 	MessageDTO save(VacunacionDTO vacunacionDTO);
+
+	List<VacunacionDTO> findByFechaCitaBetweenAndEstado(String fechaIni, String fechaFin, String estado,
+			Integer idUbicacion);
+
+	List<VacunacionDTO> findByFechaCitaBetweenAndIdVacunaAndEstado(String fechaIni, String fechaFin, Integer idVacuna,
+			String estado, Integer idUbicacion);
 
 }

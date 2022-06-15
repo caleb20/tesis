@@ -42,7 +42,7 @@ import com.tesis.vacuna.service.VacunacionService;
 
 @RestController
 @RequestMapping("/vacunas")
-@CrossOrigin
+@CrossOrigin("*")
 public class TesisController {
 
 	@Autowired
@@ -160,16 +160,16 @@ public class TesisController {
 		return vacunacionService.save(vacunacionDTO);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
-	@GetMapping("/vacunacion/{fechaIni}/{fechaFin}/{idVacuna}")
+	// @PreAuthorize("hasAnyRole('ADMIN','USER','MEDICO','HIJO')")
+	@GetMapping("/vacunacion/{fechaIni}/{fechaFin}/{idVacuna}/{idUbicacion}")
 	public List<VacunacionDTO> getVacunacionByFechaTipoVacuna(@PathVariable String fechaIni,
-			@PathVariable String fechaFin, @PathVariable Integer idVacuna) {
+			@PathVariable String fechaFin, @PathVariable Integer idVacuna, @PathVariable Integer idUbicacion) {
 
 		if (idVacuna.equals(0)) {
-			return vacunacionService.findByFechaCitaBetweenAndEstado(fechaIni, fechaFin, "2");
+			return vacunacionService.findByFechaCitaBetweenAndEstado(fechaIni, fechaFin, "2", idUbicacion);
 		} else {
-			return vacunacionService.findByFechaCitaBetweenAndIdVacunaAndEstado(fechaIni, fechaFin, idVacuna, "2");
-
+			return vacunacionService.findByFechaCitaBetweenAndIdVacunaAndEstado(fechaIni, fechaFin, idVacuna, "2",
+					idUbicacion);
 		}
 
 	}

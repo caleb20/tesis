@@ -1,5 +1,8 @@
 package com.tesis.vacuna.dto;
 
+import lombok.Data;
+
+@Data
 public class DetalleVacunacionDTO {
 
 	private String tipo;
@@ -10,69 +13,5 @@ public class DetalleVacunacionDTO {
 	private String lugar;
 	private String dniVacunador;
 	private String reaccion;
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public boolean isAplicado() {
-		return aplicado;
-	}
-
-	public void setAplicado(boolean aplicado) {
-		this.aplicado = aplicado;
-	}
-
-	public String getFechaCita() {
-		return fechaCita;
-	}
-
-	public void setFechaCita(String fechaCita) {
-		this.fechaCita = fechaCita;
-	}
-
-	public String getFechaVacunacion() {
-		return fechaVacunacion;
-	}
-
-	public void setFechaVacunacion(String fechaVacunacion) {
-		this.fechaVacunacion = fechaVacunacion;
-	}
-
-	public String getLugar() {
-		return lugar;
-	}
-
-	public void setLugar(String lugar) {
-		this.lugar = lugar;
-	}
-
-	public String getDniVacunador() {
-		return dniVacunador;
-	}
-
-	public void setDniVacunador(String dniVacunador) {
-		this.dniVacunador = dniVacunador;
-	}
-
-	public String getReaccion() {
-		return reaccion;
-	}
-
-	public void setReaccion(String reaccion) {
-		this.reaccion = reaccion;
-	}
 
 }

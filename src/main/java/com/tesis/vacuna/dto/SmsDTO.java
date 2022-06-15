@@ -1,12 +1,11 @@
 package com.tesis.vacuna.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class Mensaje {
+public class SmsDTO {
 
+	private String numero;
 	private String mensaje;
 
 }

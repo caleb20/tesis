@@ -19,4 +19,10 @@ public interface VacunacionRepository extends JpaRepository<VacunacionEntity, In
 			String estado);
 
 	List<VacunacionEntity> findByFechaCitaBetweenAndEstado(Date fechaIni, Date fechaFin, String estado);
+
+	List<VacunacionEntity> findByFechaCitaBetweenAndIdVacunaAndEstadoAndIdUbicacion(Date fechaIni, Date fechaFin,
+			Integer idVacuna, String estado, Integer idUbicacion);
+
+	List<VacunacionEntity> findByFechaCitaBetweenAndEstadoAndIdUbicacion(Date fechaIni, Date fechaFin, String estado,
+			Integer idUbicacion);
 }
